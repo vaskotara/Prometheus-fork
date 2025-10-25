@@ -3,10 +3,7 @@ local __DARKLUA_BUNDLE_MODULES = {cache = {}}
 do
     do
         local function __modImpl()
-            local NAME = 'Prometheus'
-            local REVISION = 'Alpha'
-            local VERSION = 'v0.2'
-            local BY = 'levno-710'
+            local NAME, REVISION, VERSION, BY = 'Prometheus', 'Alpha', 'v0.2', 'levno-710'
 
             for _, currArg in pairs(arg)do
                 if currArg == '--CI' then
@@ -31,7 +28,7 @@ do
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.a = function()
+        function __DARKLUA_BUNDLE_MODULES.a()
             local v = __DARKLUA_BUNDLE_MODULES.cache.a
 
             if not v then
@@ -46,8 +43,7 @@ do
     end
     do
         local function __modImpl()
-            local Ast = {}
-            local AstKind = {
+            local Ast, AstKind = {}, {
                 TopNode = 'TopNode',
                 Block = 'Block',
                 ContinueStatement = 'ContinueStatement',
@@ -143,10 +139,11 @@ do
             }
 
             Ast.AstKind = AstKind
-            Ast.astKindExpressionToNumber = function(kind)
+
+            function Ast.astKindExpressionToNumber(kind)
                 return astKindExpressionLookup[kind] or 100
             end
-            Ast.ConstantNode = function(val)
+            function Ast.ConstantNode(val)
                 if type(val) == 'nil' then
                     return Ast.NilExpression()
                 end
@@ -160,12 +157,12 @@ do
                     return Ast.BooleanExpression(val)
                 end
             end
-            Ast.NopStatement = function()
+            function Ast.NopStatement()
                 return {
                     kind = AstKind.NopStatement,
                 }
             end
-            Ast.IfElseExpression = function(condition, true_value, false_value)
+            function Ast.IfElseExpression(condition, true_value, false_value)
                 return {
                     kind = AstKind.IfElseExpression,
                     condition = condition,
@@ -173,54 +170,54 @@ do
                     false_value = false_value,
                 }
             end
-            Ast.TopNode = function(body, globalScope)
+            function Ast.TopNode(body, globalScope)
                 return {
                     kind = AstKind.TopNode,
                     body = body,
                     globalScope = globalScope,
                 }
             end
-            Ast.TableEntry = function(value)
+            function Ast.TableEntry(value)
                 return {
                     kind = AstKind.TableEntry,
                     value = value,
                 }
             end
-            Ast.KeyedTableEntry = function(key, value)
+            function Ast.KeyedTableEntry(key, value)
                 return {
                     kind = AstKind.KeyedTableEntry,
                     key = key,
                     value = value,
                 }
             end
-            Ast.TableConstructorExpression = function(entries)
+            function Ast.TableConstructorExpression(entries)
                 return {
                     kind = AstKind.TableConstructorExpression,
                     entries = entries,
                 }
             end
-            Ast.Block = function(statements, scope)
+            function Ast.Block(statements, scope)
                 return {
                     kind = AstKind.Block,
                     statements = statements,
                     scope = scope,
                 }
             end
-            Ast.BreakStatement = function(loop, scope)
+            function Ast.BreakStatement(loop, scope)
                 return {
                     kind = AstKind.BreakStatement,
                     loop = loop,
                     scope = scope,
                 }
             end
-            Ast.ContinueStatement = function(loop, scope)
+            function Ast.ContinueStatement(loop, scope)
                 return {
                     kind = AstKind.ContinueStatement,
                     loop = loop,
                     scope = scope,
                 }
             end
-            Ast.PassSelfFunctionCallStatement = function(
+            function Ast.PassSelfFunctionCallStatement(
                 base,
                 passSelfFunctionName,
                 args
@@ -232,10 +229,10 @@ do
                     args = args,
                 }
             end
-            Ast.AssignmentStatement = function(lhs, rhs)
+            function Ast.AssignmentStatement(lhs, rhs)
                 if (#lhs < 1) then
                     print(debug.traceback())
-                    error('Something went wrong!')
+                    error'Something went wrong!'
                 end
 
                 return {
@@ -244,75 +241,75 @@ do
                     rhs = rhs,
                 }
             end
-            Ast.CompoundAddStatement = function(lhs, rhs)
+            function Ast.CompoundAddStatement(lhs, rhs)
                 return {
                     kind = AstKind.CompoundAddStatement,
                     lhs = lhs,
                     rhs = rhs,
                 }
             end
-            Ast.CompoundSubStatement = function(lhs, rhs)
+            function Ast.CompoundSubStatement(lhs, rhs)
                 return {
                     kind = AstKind.CompoundSubStatement,
                     lhs = lhs,
                     rhs = rhs,
                 }
             end
-            Ast.CompoundMulStatement = function(lhs, rhs)
+            function Ast.CompoundMulStatement(lhs, rhs)
                 return {
                     kind = AstKind.CompoundMulStatement,
                     lhs = lhs,
                     rhs = rhs,
                 }
             end
-            Ast.CompoundDivStatement = function(lhs, rhs)
+            function Ast.CompoundDivStatement(lhs, rhs)
                 return {
                     kind = AstKind.CompoundDivStatement,
                     lhs = lhs,
                     rhs = rhs,
                 }
             end
-            Ast.CompoundPowStatement = function(lhs, rhs)
+            function Ast.CompoundPowStatement(lhs, rhs)
                 return {
                     kind = AstKind.CompoundPowStatement,
                     lhs = lhs,
                     rhs = rhs,
                 }
             end
-            Ast.CompoundModStatement = function(lhs, rhs)
+            function Ast.CompoundModStatement(lhs, rhs)
                 return {
                     kind = AstKind.CompoundModStatement,
                     lhs = lhs,
                     rhs = rhs,
                 }
             end
-            Ast.CompoundConcatStatement = function(lhs, rhs)
+            function Ast.CompoundConcatStatement(lhs, rhs)
                 return {
                     kind = AstKind.CompoundConcatStatement,
                     lhs = lhs,
                     rhs = rhs,
                 }
             end
-            Ast.FunctionCallStatement = function(base, args)
+            function Ast.FunctionCallStatement(base, args)
                 return {
                     kind = AstKind.FunctionCallStatement,
                     base = base,
                     args = args,
                 }
             end
-            Ast.ReturnStatement = function(args)
+            function Ast.ReturnStatement(args)
                 return {
                     kind = AstKind.ReturnStatement,
                     args = args,
                 }
             end
-            Ast.DoStatement = function(body)
+            function Ast.DoStatement(body)
                 return {
                     kind = AstKind.DoStatement,
                     body = body,
                 }
             end
-            Ast.WhileStatement = function(body, condition, parentScope)
+            function Ast.WhileStatement(body, condition, parentScope)
                 return {
                     kind = AstKind.WhileStatement,
                     body = body,
@@ -320,7 +317,7 @@ do
                     parentScope = parentScope,
                 }
             end
-            Ast.ForInStatement = function(
+            function Ast.ForInStatement(
                 scope,
                 vars,
                 expressions,
@@ -337,7 +334,7 @@ do
                     parentScope = parentScope,
                 }
             end
-            Ast.ForStatement = function(
+            function Ast.ForStatement(
                 scope,
                 id,
                 initialValue,
@@ -357,7 +354,7 @@ do
                     parentScope = parentScope,
                 }
             end
-            Ast.RepeatStatement = function(condition, body, parentScope)
+            function Ast.RepeatStatement(condition, body, parentScope)
                 return {
                     kind = AstKind.RepeatStatement,
                     body = body,
@@ -365,7 +362,7 @@ do
                     parentScope = parentScope,
                 }
             end
-            Ast.IfStatement = function(condition, body, elseifs, elsebody)
+            function Ast.IfStatement(condition, body, elseifs, elsebody)
                 return {
                     kind = AstKind.IfStatement,
                     condition = condition,
@@ -374,7 +371,7 @@ do
                     elsebody = elsebody,
                 }
             end
-            Ast.FunctionDeclaration = function(scope, id, indices, args, body)
+            function Ast.FunctionDeclaration(scope, id, indices, args, body)
                 return {
                     kind = AstKind.FunctionDeclaration,
                     scope = scope,
@@ -389,7 +386,7 @@ do
                     end,
                 }
             end
-            Ast.LocalFunctionDeclaration = function(scope, id, args, body)
+            function Ast.LocalFunctionDeclaration(scope, id, args, body)
                 return {
                     kind = AstKind.LocalFunctionDeclaration,
                     scope = scope,
@@ -401,7 +398,7 @@ do
                     end,
                 }
             end
-            Ast.LocalVariableDeclaration = function(scope, ids, expressions)
+            function Ast.LocalVariableDeclaration(scope, ids, expressions)
                 return {
                     kind = AstKind.LocalVariableDeclaration,
                     scope = scope,
@@ -409,41 +406,41 @@ do
                     expressions = expressions,
                 }
             end
-            Ast.VarargExpression = function()
+            function Ast.VarargExpression()
                 return {
                     kind = AstKind.VarargExpression,
                     isConstant = false,
                 }
             end
-            Ast.BooleanExpression = function(value)
+            function Ast.BooleanExpression(value)
                 return {
                     kind = AstKind.BooleanExpression,
                     isConstant = true,
                     value = value,
                 }
             end
-            Ast.NilExpression = function()
+            function Ast.NilExpression()
                 return {
                     kind = AstKind.NilExpression,
                     isConstant = true,
                     value = nil,
                 }
             end
-            Ast.NumberExpression = function(value)
+            function Ast.NumberExpression(value)
                 return {
                     kind = AstKind.NumberExpression,
                     isConstant = true,
                     value = value,
                 }
             end
-            Ast.StringExpression = function(value)
+            function Ast.StringExpression(value)
                 return {
                     kind = AstKind.StringExpression,
                     isConstant = true,
                     value = value,
                 }
             end
-            Ast.OrExpression = function(lhs, rhs, simplify)
+            function Ast.OrExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value or rhs.value
@@ -461,7 +458,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.AndExpression = function(lhs, rhs, simplify)
+            function Ast.AndExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value and rhs.value
@@ -479,7 +476,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.LessThanExpression = function(lhs, rhs, simplify)
+            function Ast.LessThanExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value < rhs.value
@@ -497,7 +494,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.GreaterThanExpression = function(lhs, rhs, simplify)
+            function Ast.GreaterThanExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value > rhs.value
@@ -515,7 +512,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.LessThanOrEqualsExpression = function(lhs, rhs, simplify)
+            function Ast.LessThanOrEqualsExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value <= rhs.value
@@ -533,7 +530,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.GreaterThanOrEqualsExpression = function(lhs, rhs, simplify)
+            function Ast.GreaterThanOrEqualsExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value >= rhs.value
@@ -551,7 +548,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.NotEqualsExpression = function(lhs, rhs, simplify)
+            function Ast.NotEqualsExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value ~= rhs.value
@@ -569,7 +566,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.EqualsExpression = function(lhs, rhs, simplify)
+            function Ast.EqualsExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value == rhs.value
@@ -587,7 +584,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.StrCatExpression = function(lhs, rhs, simplify)
+            function Ast.StrCatExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value .. rhs.value
@@ -605,7 +602,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.AddExpression = function(lhs, rhs, simplify)
+            function Ast.AddExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value + rhs.value
@@ -623,7 +620,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.SubExpression = function(lhs, rhs, simplify)
+            function Ast.SubExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value - rhs.value
@@ -641,7 +638,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.MulExpression = function(lhs, rhs, simplify)
+            function Ast.MulExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value * rhs.value
@@ -659,7 +656,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.DivExpression = function(lhs, rhs, simplify)
+            function Ast.DivExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant and rhs.value ~= 0) then
                     local success, val = pcall(function()
                         return lhs.value / rhs.value
@@ -677,7 +674,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.ModExpression = function(lhs, rhs, simplify)
+            function Ast.ModExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value % rhs.value
@@ -695,7 +692,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.NotExpression = function(rhs, simplify)
+            function Ast.NotExpression(rhs, simplify)
                 if (simplify and rhs.isConstant) then
                     local success, val = pcall(function()
                         return not rhs.value
@@ -712,7 +709,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.NegateExpression = function(rhs, simplify)
+            function Ast.NegateExpression(rhs, simplify)
                 if (simplify and rhs.isConstant) then
                     local success, val = pcall(function()
                         return -rhs.value
@@ -729,7 +726,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.LenExpression = function(rhs, simplify)
+            function Ast.LenExpression(rhs, simplify)
                 if (simplify and rhs.isConstant) then
                     local success, val = pcall(function()
                         return #rhs.value
@@ -746,7 +743,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.PowExpression = function(lhs, rhs, simplify)
+            function Ast.PowExpression(lhs, rhs, simplify)
                 if (simplify and rhs.isConstant and lhs.isConstant) then
                     local success, val = pcall(function()
                         return lhs.value ^ rhs.value
@@ -764,7 +761,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.IndexExpression = function(base, index)
+            function Ast.IndexExpression(base, index)
                 return {
                     kind = AstKind.IndexExpression,
                     base = base,
@@ -772,7 +769,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.AssignmentIndexing = function(base, index)
+            function Ast.AssignmentIndexing(base, index)
                 return {
                     kind = AstKind.AssignmentIndexing,
                     base = base,
@@ -780,7 +777,7 @@ do
                     isConstant = false,
                 }
             end
-            Ast.PassSelfFunctionCallExpression = function(
+            function Ast.PassSelfFunctionCallExpression(
                 base,
                 passSelfFunctionName,
                 args
@@ -792,14 +789,14 @@ do
                     args = args,
                 }
             end
-            Ast.FunctionCallExpression = function(base, args)
+            function Ast.FunctionCallExpression(base, args)
                 return {
                     kind = AstKind.FunctionCallExpression,
                     base = base,
                     args = args,
                 }
             end
-            Ast.VariableExpression = function(scope, id)
+            function Ast.VariableExpression(scope, id)
                 scope.addReference(scope, id)
 
                 return {
@@ -811,7 +808,7 @@ do
                     end,
                 }
             end
-            Ast.AssignmentVariable = function(scope, id)
+            function Ast.AssignmentVariable(scope, id)
                 scope.addReference(scope, id)
 
                 return {
@@ -823,7 +820,7 @@ do
                     end,
                 }
             end
-            Ast.FunctionLiteralExpression = function(args, body)
+            function Ast.FunctionLiteralExpression(args, body)
                 return {
                     kind = AstKind.FunctionLiteralExpression,
                     args = args,
@@ -834,7 +831,7 @@ do
             return Ast
         end
 
-        __DARKLUA_BUNDLE_MODULES.b = function()
+        function __DARKLUA_BUNDLE_MODULES.b()
             local v = __DARKLUA_BUNDLE_MODULES.cache.b
 
             if not v then
@@ -849,7 +846,7 @@ do
     end
     do
         local function __modImpl()
-            local keys = {
+            local keys, escapeString = {
                 reset = 0,
                 bright = 1,
                 dim = 2,
@@ -878,8 +875,7 @@ do
                 greybg = 47,
                 graybg = 47,
                 whitebg = 107,
-            }
-            local escapeString = string.char(27) .. '[%dm'
+            }, string.char(27) .. '[%dm'
 
             local function escapeNumber(number)
                 return escapeString.format(escapeString, number)
@@ -896,7 +892,7 @@ do
 
                 local escapes = {}
 
-                for i, name in ipairs({...})do
+                for i, name in ipairs{...}do
                     table.insert(escapes, escapeNumber(keys[name]))
                 end
 
@@ -910,7 +906,7 @@ do
             })
         end
 
-        __DARKLUA_BUNDLE_MODULES.c = function()
+        function __DARKLUA_BUNDLE_MODULES.c()
             local v = __DARKLUA_BUNDLE_MODULES.cache.c
 
             if not v then
@@ -925,9 +921,7 @@ do
     end
     do
         local function __modImpl()
-            local logger = {}
-            local config = __DARKLUA_BUNDLE_MODULES.a()
-            local colors = __DARKLUA_BUNDLE_MODULES.c()
+            local logger, config, colors = {}, __DARKLUA_BUNDLE_MODULES.a(), __DARKLUA_BUNDLE_MODULES.c()
 
             logger.LogLevel = {
                 Error = 0,
@@ -940,37 +934,44 @@ do
             logger.debugCallback = function(...)
                 print(colors(config.NameUpper .. ': ' ..  ..., 'grey'))
             end
-            logger.debug = function(self, ...)
+
+            function logger.debug(self, ...)
                 if self.logLevel >= self.LogLevel.Debug then
                     self.debugCallback(...)
                 end
             end
+
             logger.logCallback = function(...)
                 print(colors(config.NameUpper .. ': ', 'magenta') ..  ...)
             end
-            logger.log = function(self, ...)
+
+            function logger.log(self, ...)
                 if self.logLevel >= self.LogLevel.Log then
                     self.logCallback(...)
                 end
             end
-            logger.info = function(self, ...)
+            function logger.info(self, ...)
                 if self.logLevel >= self.LogLevel.Log then
                     self.logCallback(...)
                 end
             end
+
             logger.warnCallback = function(...)
                 print(colors(config.NameUpper .. ': ' ..  ..., 'yellow'))
             end
-            logger.warn = function(self, ...)
+
+            function logger.warn(self, ...)
                 if self.logLevel >= self.LogLevel.Warn then
                     self.warnCallback(...)
                 end
             end
+
             logger.errorCallback = function(...)
                 print(colors(config.NameUpper .. ': ' ..  ..., 'red'))
                 error(...)
             end
-            logger.error = function(self, ...)
+
+            function logger.error(self, ...)
                 self.errorCallback(...)
                 error(config.NameUpper .. ': logger.errorCallback did not throw an Error!')
             end
@@ -978,7 +979,7 @@ do
             return logger
         end
 
-        __DARKLUA_BUNDLE_MODULES.d = function()
+        function __DARKLUA_BUNDLE_MODULES.d()
             local v = __DARKLUA_BUNDLE_MODULES.cache.d
 
             if not v then
@@ -993,20 +994,18 @@ do
     end
     do
         local function __modImpl()
-            local M = {
+            local M, floor, MOD = {
                 _TYPE = 'module',
                 _NAME = 'bit.numberlua',
                 _VERSION = '0.3.1.20120131',
-            }
-            local floor = math.floor
-            local MOD = 4294967296
+            }, math.floor, 4294967296
             local MODM = MOD - 1
 
             local function memoize(f)
                 local mt = {}
                 local t = setmetatable({}, mt)
 
-                mt.__index = function(self, k)
+                function mt.__index(self, k)
                     local v = f(k)
 
                     t[k] = v
@@ -1047,9 +1046,10 @@ do
                 return make_bitop_uncached(op2, 2 ^ (t.n or 1))
             end
 
-            M.tobit = function(x)
+            function M.tobit(x)
                 return x % 4294967296
             end
+
             M.bxor = make_bitop{
                 [0] = {
                     [0] = 0,
@@ -1064,42 +1064,45 @@ do
 
             local bxor = M.bxor
 
-            M.bnot = function(a)
+            function M.bnot(a)
                 return MODM - a
             end
 
             local bnot = M.bnot
 
-            M.band = function(a, b)
+            function M.band(a, b)
                 return ((a + b) - bxor(a, b)) / 2
             end
 
             local band = M.band
 
-            M.bor = function(a, b)
+            function M.bor(a, b)
                 return MODM - band(MODM - a, MODM - b)
             end
 
-            local bor = M.bor
-            local lshift, rshift
+            local bor, lshift, rshift = M.bor, nil, nil
 
-            M.rshift = function(a, disp)
+            function M.rshift(a, disp)
                 if disp < 0 then
                     return lshift(a, -disp)
                 end
 
                 return floor(a % 4294967296 / 2 ^ disp)
             end
+
             rshift = M.rshift
-            M.lshift = function(a, disp)
+
+            function M.lshift(a, disp)
                 if disp < 0 then
                     return rshift(a, -disp)
                 end
 
                 return (a * 2 ^ disp) % 4294967296
             end
+
             lshift = M.lshift
-            M.tohex = function(x, n)
+
+            function M.tohex(x, n)
                 n = n or 8
 
                 local up
@@ -1120,7 +1123,7 @@ do
 
             local tohex = M.tohex
 
-            M.extract = function(n, field, width)
+            function M.extract(n, field, width)
                 width = width or 1
 
                 return band(rshift(n, field), 2 ^ width - 1)
@@ -1128,7 +1131,7 @@ do
 
             local extract = M.extract
 
-            M.replace = function(n, v, field, width)
+            function M.replace(n, v, field, width)
                 width = width or 1
 
                 local mask1 = 2 ^ width - 1
@@ -1142,7 +1145,7 @@ do
 
             local replace = M.replace
 
-            M.bswap = function(x)
+            function M.bswap(x)
                 local a = band(x, 255)
 
                 x = rshift(x, 8)
@@ -1162,7 +1165,7 @@ do
 
             local bswap = M.bswap
 
-            M.rrotate = function(x, disp)
+            function M.rrotate(x, disp)
                 disp = disp % 32
 
                 local low = band(x, 2 ^ disp - 1)
@@ -1172,7 +1175,7 @@ do
 
             local rrotate = M.rrotate
 
-            M.lrotate = function(x, disp)
+            function M.lrotate(x, disp)
                 return rrotate(x, -disp)
             end
 
@@ -1180,7 +1183,8 @@ do
 
             M.rol = M.lrotate
             M.ror = M.rrotate
-            M.arshift = function(x, disp)
+
+            function M.arshift(x, disp)
                 local z = rshift(x, disp)
 
                 if x >= 2147483648 then
@@ -1192,9 +1196,10 @@ do
 
             local arshift = M.arshift
 
-            M.btest = function(x, y)
+            function M.btest(x, y)
                 return band(x, y) ~= 0
             end
+
             M.bit32 = {}
 
             local function bit32_bnot(x)
@@ -1268,30 +1273,31 @@ do
             end
 
             M.bit32.bor = bit32_bor
-            M.bit32.btest = function(...)
+
+            function M.bit32.btest(...)
                 return bit32_band(...) ~= 0
             end
-            M.bit32.lrotate = function(x, disp)
+            function M.bit32.lrotate(x, disp)
                 return lrotate(x % MOD, disp)
             end
-            M.bit32.rrotate = function(x, disp)
+            function M.bit32.rrotate(x, disp)
                 return rrotate(x % MOD, disp)
             end
-            M.bit32.lshift = function(x, disp)
+            function M.bit32.lshift(x, disp)
                 if disp > 31 or disp < -31 then
                     return 0
                 end
 
                 return lshift(x % MOD, disp)
             end
-            M.bit32.rshift = function(x, disp)
+            function M.bit32.rshift(x, disp)
                 if disp > 31 or disp < -31 then
                     return 0
                 end
 
                 return rshift(x % MOD, disp)
             end
-            M.bit32.arshift = function(x, disp)
+            function M.bit32.arshift(x, disp)
                 x = x % MOD
 
                 if disp >= 0 then
@@ -1310,7 +1316,7 @@ do
                     return lshift(x, -disp)
                 end
             end
-            M.bit32.extract = function(x, field, ...)
+            function M.bit32.extract(x, field, ...)
                 local width = ... or 1
 
                 if field < 0 or field > 31 or width < 0 or field + width > 32 then
@@ -1321,7 +1327,7 @@ do
 
                 return extract(x, field, ...)
             end
-            M.bit32.replace = function(x, v, field, ...)
+            function M.bit32.replace(x, v, field, ...)
                 local width = ... or 1
 
                 if field < 0 or field > 31 or width < 0 or field + width > 32 then
@@ -1333,8 +1339,10 @@ do
 
                 return replace(x, v, field, ...)
             end
+
             M.bit = {}
-            M.bit.tobit = function(x)
+
+            function M.bit.tobit(x)
                 x = x % MOD
 
                 if x >= 2147483648 then
@@ -1346,10 +1354,10 @@ do
 
             local bit_tobit = M.bit.tobit
 
-            M.bit.tohex = function(x, ...)
+            function M.bit.tohex(x, ...)
                 return tohex(x % MOD, ...)
             end
-            M.bit.bnot = function(x)
+            function M.bit.bnot(x)
                 return bit_tobit(bnot(x % MOD))
             end
 
@@ -1388,29 +1396,30 @@ do
             end
 
             M.bit.bxor = bit_bxor
-            M.bit.lshift = function(x, n)
+
+            function M.bit.lshift(x, n)
                 return bit_tobit(lshift(x % MOD, n % 32))
             end
-            M.bit.rshift = function(x, n)
+            function M.bit.rshift(x, n)
                 return bit_tobit(rshift(x % MOD, n % 32))
             end
-            M.bit.arshift = function(x, n)
+            function M.bit.arshift(x, n)
                 return bit_tobit(arshift(x % MOD, n % 32))
             end
-            M.bit.rol = function(x, n)
+            function M.bit.rol(x, n)
                 return bit_tobit(lrotate(x % MOD, n % 32))
             end
-            M.bit.ror = function(x, n)
+            function M.bit.ror(x, n)
                 return bit_tobit(rrotate(x % MOD, n % 32))
             end
-            M.bit.bswap = function(x)
+            function M.bit.bswap(x)
                 return bit_tobit(bswap(x % MOD))
             end
 
             return M
         end
 
-        __DARKLUA_BUNDLE_MODULES.e = function()
+        function __DARKLUA_BUNDLE_MODULES.e()
             local v = __DARKLUA_BUNDLE_MODULES.cache.e
 
             if not v then
@@ -1425,9 +1434,7 @@ do
     end
     do
         local function __modImpl()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local bit32 = __DARKLUA_BUNDLE_MODULES.e().bit32
-            local MAX_UNPACK_COUNT = 195
+            local logger, bit32, MAX_UNPACK_COUNT = __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.e().bit32, 195
 
             local function lookupify(tb)
                 local tb2 = {}
@@ -1493,8 +1500,7 @@ do
                 return tb
             end
             local function keys(tb)
-                local keyset = {}
-                local n = 0
+                local keyset, n = {}, 0
 
                 for k, v in pairs(tb)do
                     n = n + 1
@@ -1509,7 +1515,7 @@ do
             do
                 local string_char = string.char
 
-                utf8char = function(cp)
+                function utf8char(cp)
                     if cp < 128 then
                         return string_char(cp)
                     end
@@ -1550,8 +1556,7 @@ do
                 return tb
             end
             local function shuffle_string(str)
-                local len = #str
-                local t = {}
+                local len, t = #str, {}
 
                 for i = 1, len do
                     t[i] = string.sub(str, i, i)
@@ -1565,8 +1570,7 @@ do
                 return table.concat(t)
             end
             local function readDouble(bytes)
-                local sign = 1
-                local mantissa = bytes[2] % 16
+                local sign, mantissa = 1, bytes[2] % 16
 
                 for i = 3, 8 do
                     mantissa = mantissa * 256 + bytes[i]
@@ -1633,8 +1637,7 @@ do
                     logger.error(logger, string.format('u16 out of bounds: %d', u16))
                 end
 
-                local lower = bit32.band(u16, 255)
-                local upper = bit32.rshift(u16, 8)
+                local lower, upper = bit32.band(u16, 255), bit32.rshift(u16, 8)
 
                 return {lower, upper}
             end
@@ -1692,8 +1695,7 @@ do
                     return string.char(table.unpack(arr))
                 end
 
-                local str = ''
-                local overflow = length % MAX_UNPACK_COUNT
+                local str, overflow = '', length % MAX_UNPACK_COUNT
 
                 for i = 1, (#arr - overflow) / MAX_UNPACK_COUNT do
                     str = str .. string.char(table.unpack(arr, (i - 1) * MAX_UNPACK_COUNT + 1, i * MAX_UNPACK_COUNT))
@@ -1711,8 +1713,7 @@ do
                 return n >= 0 and n <= 4294967295 and isInt(n)
             end
             local function toBits(num)
-                local t = {}
-                local rest
+                local t, rest = {}, nil
 
                 while num > 0 do
                     rest = math.fmod(num, 2)
@@ -1756,7 +1757,7 @@ do
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.f = function()
+        function __DARKLUA_BUNDLE_MODULES.f()
             local v = __DARKLUA_BUNDLE_MODULES.cache.f
 
             if not v then
@@ -1771,8 +1772,7 @@ do
     end
     do
         local function __modImpl()
-            local Enums = {}
-            local chararray = __DARKLUA_BUNDLE_MODULES.f().chararray
+            local Enums, chararray = {}, __DARKLUA_BUNDLE_MODULES.f().chararray
 
             Enums.LuaVersion = {
                 LuaU = 'LuaU',
@@ -1803,7 +1803,7 @@ do
                         'until',
                         'while',
                     },
-                    SymbolChars = chararray('+-*/%^#=~<>(){}[];:,.'),
+                    SymbolChars = chararray'+-*/%^#=~<>(){}[];:,.',
                     MaxSymbolLength = 3,
                     Symbols = {
                         '+',
@@ -1833,10 +1833,10 @@ do
                         '..',
                         '...',
                     },
-                    IdentChars = chararray(
-[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789]]),
-                    NumberChars = chararray('0123456789'),
-                    HexNumberChars = chararray('0123456789abcdefABCDEF'),
+                    IdentChars = chararray
+[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789]],
+                    NumberChars = chararray'0123456789',
+                    HexNumberChars = chararray'0123456789abcdefABCDEF',
                     BinaryNumberChars = {
                         '0',
                         '1',
@@ -1896,7 +1896,7 @@ do
                         'until',
                         'while',
                     },
-                    SymbolChars = chararray('+-*/%^#=~<>(){}[];:,.'),
+                    SymbolChars = chararray'+-*/%^#=~<>(){}[];:,.',
                     MaxSymbolLength = 3,
                     Symbols = {
                         '+',
@@ -1938,10 +1938,10 @@ do
                         '|',
                         '&',
                     },
-                    IdentChars = chararray(
-[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789]]),
-                    NumberChars = chararray('0123456789'),
-                    HexNumberChars = chararray('0123456789abcdefABCDEF'),
+                    IdentChars = chararray
+[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789]],
+                    NumberChars = chararray'0123456789',
+                    HexNumberChars = chararray'0123456789abcdefABCDEF',
                     BinaryNumberChars = {
                         '0',
                         '1',
@@ -1983,7 +1983,7 @@ do
             return Enums
         end
 
-        __DARKLUA_BUNDLE_MODULES.g = function()
+        function __DARKLUA_BUNDLE_MODULES.g()
             local v = __DARKLUA_BUNDLE_MODULES.cache.g
 
             if not v then
@@ -1998,17 +1998,8 @@ do
     end
     do
         local function __modImpl()
-            local Enums = __DARKLUA_BUNDLE_MODULES.g()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local config = __DARKLUA_BUNDLE_MODULES.a()
-            local LuaVersion = Enums.LuaVersion
-            local lookupify = util.lookupify
-            local unlookupify = util.unlookupify
-            local escape = util.escape
-            local chararray = util.chararray
-            local keys = util.keys
-            local Tokenizer = {}
+            local Enums, util, logger, config = __DARKLUA_BUNDLE_MODULES.g(), __DARKLUA_BUNDLE_MODULES.f(), __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.a()
+            local LuaVersion, lookupify, unlookupify, escape, chararray, keys, Tokenizer = Enums.LuaVersion, util.lookupify, util.unlookupify, util.escape, util.chararray, util.keys, {}
 
             Tokenizer.EOF_CHAR = '<EOF>'
             Tokenizer.WHITESPACE_CHARS = lookupify{
@@ -2017,9 +2008,9 @@ do
                 '\n',
                 '\r',
             }
-            Tokenizer.ANNOTATION_CHARS = lookupify(chararray(
-[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_]]))
-            Tokenizer.ANNOTATION_START_CHARS = lookupify(chararray('!@'))
+            Tokenizer.ANNOTATION_CHARS = lookupify(chararray
+[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_]])
+            Tokenizer.ANNOTATION_START_CHARS = lookupify(chararray'!@')
             Tokenizer.Conventions = Enums.Conventions
             Tokenizer.TokenKind = {
                 Eof = 'Eof',
@@ -2063,7 +2054,7 @@ do
                 return 'Warning at Position ' .. tostring(token.line) .. ':' .. tostring(token.linePos) .. ', ' .. message
             end
 
-            Tokenizer.getPosition = function(self, i)
+            function Tokenizer.getPosition(self, i)
                 local column = self.columnMap[i]
 
                 if not column then
@@ -2072,7 +2063,7 @@ do
 
                 return column.id, column.charMap[i]
             end
-            Tokenizer.prepareGetPosition = function(self)
+            function Tokenizer.prepareGetPosition(self)
                 local columnMap, column = {}, {
                     charMap = {},
                     id = 1,
@@ -2080,8 +2071,7 @@ do
                 }
 
                 for index = 1, self.length do
-                    local character = string.sub(self.source, index, index)
-                    local columnLength = column.length + 1
+                    local character, columnLength = string.sub(self.source, index, index), column.length + 1
 
                     column.length = columnLength
                     column.charMap[index] = columnLength
@@ -2099,7 +2089,7 @@ do
 
                 self.columnMap = columnMap
             end
-            Tokenizer.new = function(self, settings)
+            function Tokenizer.new(self, settings)
                 local luaVersion = (settings and (settings.luaVersion or settings.LuaVersion)) or LuaVersion.LuaU
                 local conventions = Tokenizer.Conventions[luaVersion]
 
@@ -2138,10 +2128,10 @@ do
                     MaxSymbolLength = conventions.MaxSymbolLength,
                     Symbols = conventions.Symbols,
                     SymbolsLookup = lookupify(conventions.Symbols),
-                    StringStartLookup = lookupify({
+                    StringStartLookup = lookupify{
                         '"',
                         "'",
-                    }),
+                    },
                     annotations = {},
                 }
 
@@ -2151,14 +2141,14 @@ do
 
                 return tokenizer
             end
-            Tokenizer.reset = function(self)
+            function Tokenizer.reset(self)
                 self.index = 0
                 self.length = 0
                 self.source = ''
                 self.annotations = {}
                 self.columnMap = {}
             end
-            Tokenizer.append = function(self, code)
+            function Tokenizer.append(self, code)
                 self.source = self.source .. code
                 self.length = self.length + code.len(code)
 
@@ -2220,7 +2210,7 @@ do
                 return charOrLookup[char]
             end
 
-            Tokenizer.parseAnnotation = function(self)
+            function Tokenizer.parseAnnotation(self)
                 if is(self, Tokenizer.ANNOTATION_START_CHARS) then
                     self.index = self.index + 1
 
@@ -2240,7 +2230,7 @@ do
 
                 return get(self)
             end
-            Tokenizer.skipComment = function(self)
+            function Tokenizer.skipComment(self)
                 if (is(self, '-', 0) and is(self, '-', 1)) then
                     self.index = self.index + 2
 
@@ -2283,7 +2273,7 @@ do
 
                 return false
             end
-            Tokenizer.skipWhitespaceAndComments = function(self)
+            function Tokenizer.skipWhitespaceAndComments(self)
                 while self.skipComment(self) do end
                 while is(self, Tokenizer.WHITESPACE_CHARS) do
                     self.index = self.index + 1
@@ -2308,9 +2298,8 @@ do
                 return table.concat(buffer)
             end
 
-            Tokenizer.number = function(self)
-                local startPos = self.index
-                local source = expect(self, setmetatable({
+            function Tokenizer.number(self)
+                local startPos, source = self.index, expect(self, setmetatable({
                     ['.'] = true,
                 }, {
                     __index = self.NumberCharsLookup,
@@ -2346,10 +2335,10 @@ do
                 if (self.DecimalExponent and is(self, lookupify(self.DecimalExponent))) then
                     source = source .. get(self)
 
-                    if (is(self, lookupify({
+                    if (is(self, lookupify{
                         '+',
                         '-',
-                    }))) then
+                    })) then
                         source = source .. get(self)
                     end
 
@@ -2366,9 +2355,8 @@ do
 
                 return token(self, startPos, Tokenizer.TokenKind.Number, value)
             end
-            Tokenizer.ident = function(self)
-                local startPos = self.index
-                local source = expect(self, self.IdentCharsLookup)
+            function Tokenizer.ident(self)
+                local startPos, source = self.index, expect(self, self.IdentCharsLookup)
                 local sourceAddContent = {source}
 
                 while(is(self, self.IdentCharsLookup)) do
@@ -2390,10 +2378,8 @@ do
 
                 return tk
             end
-            Tokenizer.singleLineString = function(self)
-                local startPos = self.index
-                local startChar = expect(self, self.StringStartLookup)
-                local buffer = {}
+            function Tokenizer.singleLineString(self)
+                local startPos, startChar, buffer = self.index, expect(self, self.StringStartLookup), {}
 
                 while(not is(self, startChar)) do
                     local char = get(self)
@@ -2455,7 +2441,7 @@ do
 
                 return token(self, startPos, Tokenizer.TokenKind.String, table.concat(buffer))
             end
-            Tokenizer.multiLineString = function(self)
+            function Tokenizer.multiLineString(self)
                 local startPos = self.index
 
                 if (is(self, '[')) then
@@ -2506,7 +2492,7 @@ do
 
                 return nil, false
             end
-            Tokenizer.symbol = function(self)
+            function Tokenizer.symbol(self)
                 local startPos = self.index
 
                 for len = self.MaxSymbolLength, 1, -1 do
@@ -2521,7 +2507,7 @@ do
 
                 logger.error(logger, generateError(self, 'Unknown Symbol'))
             end
-            Tokenizer.next = function(self)
+            function Tokenizer.next(self)
                 self.skipWhitespaceAndComments(self)
 
                 local startPos = self.index
@@ -2554,7 +2540,7 @@ do
 
                 logger.error(logger, generateError(self, 'Unexpected char "' .. escape(peek(self)) .. '"!'))
             end
-            Tokenizer.scanAll = function(self)
+            function Tokenizer.scanAll(self)
                 local tb = {}
 
                 repeat
@@ -2569,7 +2555,7 @@ do
             return Tokenizer
         end
 
-        __DARKLUA_BUNDLE_MODULES.h = function()
+        function __DARKLUA_BUNDLE_MODULES.h()
             local v = __DARKLUA_BUNDLE_MODULES.cache.h
 
             if not v then
@@ -2584,10 +2570,7 @@ do
     end
     do
         local function __modImpl()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local config = __DARKLUA_BUNDLE_MODULES.a()
-            local Scope = {}
-            local scopeI = 0
+            local logger, config, Scope, scopeI = __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.a(), {}, 0
 
             local function nextName()
                 scopeI = scopeI + 1
@@ -2598,7 +2581,7 @@ do
                 return 'Warning at Position ' .. tostring(token.line) .. ':' .. tostring(token.linePos) .. ', ' .. message
             end
 
-            Scope.new = function(self, parentScope, name)
+            function Scope.new(self, parentScope, name)
                 local scope = {
                     isGlobal = false,
                     parentScope = parentScope,
@@ -2620,7 +2603,7 @@ do
 
                 return scope
             end
-            Scope.newGlobal = function(self)
+            function Scope.newGlobal(self)
                 local scope = {
                     isGlobal = true,
                     parentScope = nil,
@@ -2639,10 +2622,10 @@ do
 
                 return scope
             end
-            Scope.getParent = function(self, parentScope)
+            function Scope.getParent(self, parentScope)
                 return self.parentScope
             end
-            Scope.setParent = function(self, parentScope)
+            function Scope.setParent(self, parentScope)
                 self.parentScope:removeChild(self)
                 parentScope.addChild(parentScope, self)
 
@@ -2652,7 +2635,7 @@ do
 
             local next_name_i = 1
 
-            Scope.addVariable = function(self, name, token)
+            function Scope.addVariable(self, name, token)
                 if (not name) then
                     name = string.format('%s%i', config.IdentPrefix, next_name_i)
                     next_name_i = next_name_i + 1
@@ -2674,12 +2657,12 @@ do
 
                 return id
             end
-            Scope.enableVariable = function(self, id)
+            function Scope.enableVariable(self, id)
                 local name = self.variables[id]
 
                 self.variablesLookup[name] = id
             end
-            Scope.addDisabledVariable = function(self, name, token)
+            function Scope.addDisabledVariable(self, name, token)
                 if (not name) then
                     name = string.format('%s%i', config.IdentPrefix, next_name_i)
                     next_name_i = next_name_i + 1
@@ -2698,7 +2681,7 @@ do
 
                 return id
             end
-            Scope.addIfNotExists = function(self, id)
+            function Scope.addIfNotExists(self, id)
                 if (not self.variables[id]) then
                     local name = string.format('%s%i', config.IdentPrefix, next_name_i)
 
@@ -2709,7 +2692,7 @@ do
 
                 return id
             end
-            Scope.hasVariable = function(self, name)
+            function Scope.hasVariable(self, name)
                 if (self.isGlobal) then
                     if self.variablesLookup[name] == nil then
                         self.addVariable(self, name)
@@ -2720,22 +2703,22 @@ do
 
                 return self.variablesLookup[name] ~= nil
             end
-            Scope.getVariables = function(self)
+            function Scope.getVariables(self)
                 return self.variables
             end
-            Scope.resetReferences = function(self, id)
+            function Scope.resetReferences(self, id)
                 self.referenceCounts[id] = 0
             end
-            Scope.getReferences = function(self, id)
+            function Scope.getReferences(self, id)
                 return self.referenceCounts[id] or 0
             end
-            Scope.removeReference = function(self, id)
+            function Scope.removeReference(self, id)
                 self.referenceCounts[id] = (self.referenceCounts[id] or 0) - 1
             end
-            Scope.addReference = function(self, id)
+            function Scope.addReference(self, id)
                 self.referenceCounts[id] = (self.referenceCounts[id] or 0) + 1
             end
-            Scope.resolve = function(self, name)
+            function Scope.resolve(self, name)
                 if (self.hasVariable(self, name)) then
                     return self, self.variablesLookup[name]
                 end
@@ -2749,7 +2732,7 @@ do
 
                 return scope, id
             end
-            Scope.resolveGlobal = function(self, name)
+            function Scope.resolveGlobal(self, name)
                 if (self.isGlobal and self.hasVariable(self, name)) then
                     return self, self.variablesLookup[name]
                 end
@@ -2763,17 +2746,17 @@ do
 
                 return scope, id
             end
-            Scope.getVariableName = function(self, id)
+            function Scope.getVariableName(self, id)
                 return self.variables[id]
             end
-            Scope.removeVariable = function(self, id)
+            function Scope.removeVariable(self, id)
                 local name = self.variables[id]
 
                 self.variables[id] = nil
                 self.variablesLookup[name] = nil
                 self.skipIdLookup[id] = true
             end
-            Scope.addChild = function(self, scope)
+            function Scope.addChild(self, scope)
                 for scope, ids in pairs(scope.variablesFromHigherScopes)do
                     for id, count in pairs(ids)do
                         if count and count > 0 then
@@ -2784,11 +2767,11 @@ do
 
                 table.insert(self.children, scope)
             end
-            Scope.clearReferences = function(self)
+            function Scope.clearReferences(self)
                 self.referenceCounts = {}
                 self.variablesFromHigherScopes = {}
             end
-            Scope.removeChild = function(self, child)
+            function Scope.removeChild(self, child)
                 for i, v in ipairs(self.children)do
                     if (v == child) then
                         for scope, ids in pairs(v.variablesFromHigherScopes)do
@@ -2803,10 +2786,10 @@ do
                     end
                 end
             end
-            Scope.getMaxId = function(self)
+            function Scope.getMaxId(self)
                 return #self.variables
             end
-            Scope.addReferenceToHigherScope = function(self, scope, id, n, b)
+            function Scope.addReferenceToHigherScope(self, scope, id, n, b)
                 n = n or 1
 
                 if self.isGlobal then
@@ -2836,13 +2819,7 @@ do
                     self.parentScope:addReferenceToHigherScope(scope, id, n)
                 end
             end
-            Scope.removeReferenceToHigherScope = function(
-                self,
-                scope,
-                id,
-                n,
-                b
-            )
+            function Scope.removeReferenceToHigherScope(self, scope, id, n, b)
                 n = n or 1
 
                 if self.isGlobal then
@@ -2868,10 +2845,9 @@ do
                     self.parentScope:removeReferenceToHigherScope(scope, id, n)
                 end
             end
-            Scope.renameVariables = function(self, settings)
+            function Scope.renameVariables(self, settings)
                 if (not self.isGlobal) then
-                    local prefix = settings.prefix or ''
-                    local forbiddenNamesLookup = {}
+                    local prefix, forbiddenNamesLookup = settings.prefix or '', {}
 
                     for _, keyword in pairs(settings.Keywords)do
                         forbiddenNamesLookup[keyword] = true
@@ -2918,7 +2894,7 @@ do
             return Scope
         end
 
-        __DARKLUA_BUNDLE_MODULES.i = function()
+        function __DARKLUA_BUNDLE_MODULES.i()
             local v = __DARKLUA_BUNDLE_MODULES.cache.i
 
             if not v then
@@ -2933,21 +2909,8 @@ do
     end
     do
         local function __modImpl()
-            local Tokenizer = __DARKLUA_BUNDLE_MODULES.h()
-            local Enums = __DARKLUA_BUNDLE_MODULES.g()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local AstKind = Ast.AstKind
-            local LuaVersion = Enums.LuaVersion
-            local lookupify = util.lookupify
-            local unlookupify = util.unlookupify
-            local escape = util.escape
-            local chararray = util.chararray
-            local keys = util.keys
-            local TokenKind = Tokenizer.TokenKind
-            local Parser = {}
+            local Tokenizer, Enums, util, Ast, Scope, logger = __DARKLUA_BUNDLE_MODULES.h(), __DARKLUA_BUNDLE_MODULES.g(), __DARKLUA_BUNDLE_MODULES.f(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.d()
+            local AstKind, LuaVersion, lookupify, unlookupify, escape, chararray, keys, TokenKind, Parser = Ast.AstKind, Enums.LuaVersion, util.lookupify, util.unlookupify, util.escape, util.chararray, util.keys, Tokenizer.TokenKind, {}
             local ASSIGNMENT_NO_WARN_LOOKUP = lookupify{
                 AstKind.NilExpression,
                 AstKind.FunctionCallExpression,
@@ -2972,7 +2935,7 @@ do
                 return 'Warning at Position ' .. tostring(token.line) .. ':' .. tostring(token.linePos) .. ', ' .. message
             end
 
-            Parser.new = function(self, settings)
+            function Parser.new(self, settings)
                 local luaVersion = (settings and (settings.luaVersion or settings.LuaVersion)) or LuaVersion.LuaU
                 local parser = {
                     luaVersion = luaVersion,
@@ -3014,8 +2977,7 @@ do
                 return tk
             end
             local function is(self, kind, sourceOrN, n)
-                local token = peek(self, n)
-                local source
+                local token, source = peek(self, n), nil
 
                 if (type(sourceOrN) == 'string') then
                     source = sourceOrN
@@ -3059,7 +3021,7 @@ do
                 end
             end
 
-            Parser.parse = function(self, code)
+            function Parser.parse(self, code)
                 self.tokenizer:append(code)
 
                 self.tokens = self.tokenizer:scanAll()
@@ -3080,7 +3042,7 @@ do
 
                 return ast
             end
-            Parser.block = function(self, parentScope, currentLoop, scope)
+            function Parser.block(self, parentScope, currentLoop, scope)
                 scope = scope or Scope.new(Scope, parentScope)
 
                 local statements = {}
@@ -3095,7 +3057,7 @@ do
 
                 return Ast.Block(statements, scope)
             end
-            Parser.statement = function(self, scope, currentLoop)
+            function Parser.statement(self, scope, currentLoop)
                 while(consume(self, TokenKind.Symbol, ';')) do end
 
                 if (consume(self, TokenKind.Keyword, 'break')) then
@@ -3141,8 +3103,7 @@ do
                     return stat
                 end
                 if (consume(self, TokenKind.Keyword, 'repeat')) then
-                    local repeatScope = Scope.new(Scope, scope)
-                    local stat = Ast.RepeatStatement(nil, nil, scope)
+                    local repeatScope, stat = Scope.new(Scope, scope), Ast.RepeatStatement(nil, nil, scope)
 
                     stat.body = self.block(self, nil, stat, repeatScope)
 
@@ -3166,8 +3127,7 @@ do
 
                     expect(self, TokenKind.Keyword, 'then')
 
-                    local body = self.block(self, scope, currentLoop)
-                    local elseifs = {}
+                    local body, elseifs = self.block(self, scope, currentLoop), {}
 
                     while(consume(self, TokenKind.Keyword, 'elseif')) do
                         local condition = self.expression(self, scope)
@@ -3194,10 +3154,7 @@ do
                 end
                 if (consume(self, TokenKind.Keyword, 'function')) then
                     local obj = self.funcName(self, scope)
-                    local baseScope = obj.scope
-                    local baseId = obj.id
-                    local indices = obj.indices
-                    local funcScope = Scope.new(Scope, scope)
+                    local baseScope, baseId, indices, funcScope = obj.scope, obj.id, obj.indices, Scope.new(Scope, scope)
 
                     expect(self, TokenKind.Symbol, '(')
 
@@ -3221,8 +3178,7 @@ do
                     if (consume(self, TokenKind.Keyword, 'function')) then
                         local ident = expect(self, TokenKind.Ident)
                         local name = ident.value
-                        local id = scope.addVariable(scope, name, ident)
-                        local funcScope = Scope.new(Scope, scope)
+                        local id, funcScope = scope.addVariable(scope, name, ident), Scope.new(Scope, scope)
 
                         expect(self, TokenKind.Symbol, '(')
 
@@ -3237,8 +3193,7 @@ do
                         return Ast.LocalFunctionDeclaration(scope, id, args, body)
                     end
 
-                    local ids = self.nameList(self, scope)
-                    local expressions = {}
+                    local ids, expressions = self.nameList(self, scope), {}
 
                     if (consume(self, TokenKind.Symbol, '=')) then
                         expressions = self.exprList(self, scope)
@@ -3257,8 +3212,7 @@ do
                 end
                 if (consume(self, TokenKind.Keyword, 'for')) then
                     if (is(self, TokenKind.Symbol, '=', 1)) then
-                        local forScope = Scope.new(Scope, scope)
-                        local ident = expect(self, TokenKind.Ident)
+                        local forScope, ident = Scope.new(Scope, scope), expect(self, TokenKind.Ident)
                         local varId = forScope.addDisabledVariable(forScope, ident.value, ident)
 
                         expect(self, TokenKind.Symbol, '=')
@@ -3267,8 +3221,7 @@ do
 
                         expect(self, TokenKind.Symbol, ',')
 
-                        local finalValue = self.expression(self, scope)
-                        local incrementBy = Ast.NumberExpression(1)
+                        local finalValue, incrementBy = self.expression(self, scope), Ast.NumberExpression(1)
 
                         if (consume(self, TokenKind.Symbol, ',')) then
                             incrementBy = self.expression(self, scope)
@@ -3369,7 +3322,7 @@ do
                                     error()
                                 end
 
-                                logger.error(logger, generateError(self, string.format('expected a valid assignment statement lhs part but got nil')))
+                                logger.error(logger, generateError(self, string.format'expected a valid assignment statement lhs part but got nil'))
                             end
                             if (expr.kind == AstKind.IndexExpression or expr.kind == AstKind.VariableExpression) then
                                 if (expr.kind == AstKind.IndexExpression) then
@@ -3404,9 +3357,8 @@ do
 
                 return nil
             end
-            Parser.primaryExpression = function(self, scope)
-                local i = self.index
-                local s = self
+            function Parser.primaryExpression(self, scope)
+                local i, s = self.index, self
 
                 self.disableLog = true
 
@@ -3422,7 +3374,7 @@ do
                     return nil
                 end
             end
-            Parser.exprList = function(self, scope)
+            function Parser.exprList(self, scope)
                 local expressions = {
                     self.expression(self, scope),
                 }
@@ -3433,9 +3385,8 @@ do
 
                 return expressions
             end
-            Parser.nameList = function(self, scope)
-                local ids = {}
-                local ident = expect(self, TokenKind.Ident)
+            function Parser.nameList(self, scope)
+                local ids, ident = {}, expect(self, TokenKind.Ident)
                 local id = scope.addDisabledVariable(scope, ident.value, ident)
 
                 table.insert(ids, id)
@@ -3449,17 +3400,16 @@ do
 
                 return ids
             end
-            Parser.enableNameList = function(self, scope, list)
+            function Parser.enableNameList(self, scope, list)
                 for i, id in ipairs(list)do
                     scope.enableVariable(scope, id)
                 end
             end
-            Parser.funcName = function(self, scope)
+            function Parser.funcName(self, scope)
                 local ident = expect(self, TokenKind.Ident)
                 local baseName = ident.value
                 local baseScope, baseId = scope.resolve(scope, baseName)
-                local indices = {}
-                local passSelf = false
+                local indices, passSelf = {}, false
 
                 while(consume(self, TokenKind.Symbol, '.')) do
                     table.insert(indices, expect(self, TokenKind.Ident).value)
@@ -3479,10 +3429,10 @@ do
                     token = ident,
                 }
             end
-            Parser.expression = function(self, scope)
+            function Parser.expression(self, scope)
                 return self.expressionOr(self, scope)
             end
-            Parser.expressionOr = function(self, scope)
+            function Parser.expressionOr(self, scope)
                 local lhs = self.expressionAnd(self, scope)
 
                 if (consume(self, TokenKind.Keyword, 'or')) then
@@ -3493,7 +3443,7 @@ do
 
                 return lhs
             end
-            Parser.expressionAnd = function(self, scope)
+            function Parser.expressionAnd(self, scope)
                 local lhs = self.expressionComparision(self, scope)
 
                 if (consume(self, TokenKind.Keyword, 'and')) then
@@ -3504,7 +3454,7 @@ do
 
                 return lhs
             end
-            Parser.expressionComparision = function(self, scope)
+            function Parser.expressionComparision(self, scope)
                 local curr = self.expressionStrCat(self, scope)
 
                 repeat
@@ -3550,7 +3500,7 @@ do
 
                 return curr
             end
-            Parser.expressionStrCat = function(self, scope)
+            function Parser.expressionStrCat(self, scope)
                 local lhs = self.expressionAddSub(self, scope)
 
                 if (consume(self, TokenKind.Symbol, '..')) then
@@ -3561,7 +3511,7 @@ do
 
                 return lhs
             end
-            Parser.expressionAddSub = function(self, scope)
+            function Parser.expressionAddSub(self, scope)
                 local curr = self.expressionMulDivMod(self, scope)
 
                 repeat
@@ -3583,7 +3533,7 @@ do
 
                 return curr
             end
-            Parser.expressionMulDivMod = function(self, scope)
+            function Parser.expressionMulDivMod(self, scope)
                 local curr = self.expressionUnary(self, scope)
 
                 repeat
@@ -3611,7 +3561,7 @@ do
 
                 return curr
             end
-            Parser.expressionUnary = function(self, scope)
+            function Parser.expressionUnary(self, scope)
                 if (consume(self, TokenKind.Keyword, 'not')) then
                     local rhs = self.expressionUnary(self, scope)
 
@@ -3630,7 +3580,7 @@ do
 
                 return self.expressionPow(self, scope)
             end
-            Parser.expressionPow = function(self, scope)
+            function Parser.expressionPow(self, scope)
                 local lhs = self.tableOrFunctionLiteral(self, scope)
 
                 if (consume(self, TokenKind.Symbol, '^')) then
@@ -3641,7 +3591,7 @@ do
 
                 return lhs
             end
-            Parser.tableOrFunctionLiteral = function(self, scope)
+            function Parser.tableOrFunctionLiteral(self, scope)
                 if (is(self, TokenKind.Symbol, '{')) then
                     return self.tableConstructor(self, scope)
                 end
@@ -3651,7 +3601,7 @@ do
 
                 return self.expressionFunctionCall(self, scope)
             end
-            Parser.expressionFunctionLiteral = function(self, parentScope)
+            function Parser.expressionFunctionLiteral(self, parentScope)
                 local scope = Scope.new(Scope, parentScope)
 
                 expect(self, TokenKind.Keyword, 'function')
@@ -3667,7 +3617,7 @@ do
 
                 return Ast.FunctionLiteralExpression(args, body)
             end
-            Parser.functionArgList = function(self, scope)
+            function Parser.functionArgList(self, scope)
                 local args = {}
 
                 if (consume(self, TokenKind.Symbol, '...')) then
@@ -3699,7 +3649,7 @@ do
 
                 return args
             end
-            Parser.expressionFunctionCall = function(self, scope, base)
+            function Parser.expressionFunctionCall(self, scope, base)
                 base = base or self.expressionIndex(self, scope)
 
                 local args = {}
@@ -3733,7 +3683,7 @@ do
 
                 return node
             end
-            Parser.expressionIndex = function(self, scope, base)
+            function Parser.expressionIndex(self, scope, base)
                 base = base or self.expressionLiteral(self, scope)
 
                 while(consume(self, TokenKind.Symbol, '[')) do
@@ -3758,8 +3708,7 @@ do
                 end
 
                 if (consume(self, TokenKind.Symbol, ':')) then
-                    local passSelfFunctionName = expect(self, TokenKind.Ident).value
-                    local args = {}
+                    local passSelfFunctionName, args = expect(self, TokenKind.Ident).value, {}
 
                     if (is(self, TokenKind.String)) then
                         args = {
@@ -3796,7 +3745,7 @@ do
 
                 return base
             end
-            Parser.expressionLiteral = function(self, scope)
+            function Parser.expressionLiteral(self, scope)
                 if (consume(self, TokenKind.Symbol, '(')) then
                     local expr = self.expression(self, scope)
 
@@ -3850,7 +3799,7 @@ do
 
                 logger.error(logger, generateError(self, 'Unexpected Token "' .. peek(self).source .. '". Expected a Expression!'))
             end
-            Parser.tableConstructor = function(self, scope)
+            function Parser.tableConstructor(self, scope)
                 local entries = {}
 
                 expect(self, TokenKind.Symbol, '{')
@@ -3893,7 +3842,7 @@ do
             return Parser
         end
 
-        __DARKLUA_BUNDLE_MODULES.j = function()
+        function __DARKLUA_BUNDLE_MODULES.j()
             local v = __DARKLUA_BUNDLE_MODULES.cache.j
 
             if not v then
@@ -3908,15 +3857,8 @@ do
     end
     do
         local function __modImpl()
-            local config = __DARKLUA_BUNDLE_MODULES.a()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Enums = __DARKLUA_BUNDLE_MODULES.g()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local lookupify = util.lookupify
-            local LuaVersion = Enums.LuaVersion
-            local AstKind = Ast.AstKind
-            local Unparser = {}
+            local config, Ast, Enums, util, logger = __DARKLUA_BUNDLE_MODULES.a(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.g(), __DARKLUA_BUNDLE_MODULES.f(), __DARKLUA_BUNDLE_MODULES.d()
+            local lookupify, LuaVersion, AstKind, Unparser = util.lookupify, Enums.LuaVersion, Ast.AstKind, {}
 
             Unparser.SPACE = config.SPACE
             Unparser.TAB = config.TAB
@@ -3927,7 +3869,7 @@ do
                 return str
             end
 
-            Unparser.new = function(self, settings)
+            function Unparser.new(self, settings)
                 local luaVersion = settings.LuaVersion or LuaVersion.LuaU
                 local conventions = Enums.Conventions[luaVersion]
                 local unparser = {
@@ -3948,7 +3890,7 @@ do
 
                 return unparser
             end
-            Unparser.isValidIdentifier = function(self, source)
+            function Unparser.isValidIdentifier(self, source)
                 if (string.find(source, self.notIdentPattern)) then
                     return false
                 end
@@ -3961,46 +3903,46 @@ do
 
                 return #source > 0
             end
-            Unparser.setPrettyPrint = function(self, prettyPrint)
+            function Unparser.setPrettyPrint(self, prettyPrint)
                 self.prettyPrint = prettyPrint
             end
-            Unparser.getPrettyPrint = function(self)
+            function Unparser.getPrettyPrint(self)
                 return self.prettyPrint
             end
-            Unparser.tabs = function(self, i, ws_needed)
+            function Unparser.tabs(self, i, ws_needed)
                 return self.prettyPrint and string.rep(self.TAB, i) or ws_needed and self.SPACE or ''
             end
-            Unparser.newline = function(self, ws_needed)
+            function Unparser.newline(self, ws_needed)
                 return self.prettyPrint and '\n' or ws_needed and self.SPACE or ''
             end
-            Unparser.whitespaceIfNeeded = function(self, following, ws)
+            function Unparser.whitespaceIfNeeded(self, following, ws)
                 if (self.prettyPrint or self.identCharsLookup[string.sub(following, 1, 1)]) then
                     return ws or self.SPACE
                 end
 
                 return ''
             end
-            Unparser.whitespaceIfNeeded2 = function(self, leading, ws)
+            function Unparser.whitespaceIfNeeded2(self, leading, ws)
                 if (self.prettyPrint or self.identCharsLookup[string.sub(leading, #leading, #leading)]) then
                     return ws or self.SPACE
                 end
 
                 return ''
             end
-            Unparser.optionalWhitespace = function(self, ws)
+            function Unparser.optionalWhitespace(self, ws)
                 return self.prettyPrint and (ws or self.SPACE) or ''
             end
-            Unparser.whitespace = function(self, ws)
+            function Unparser.whitespace(self, ws)
                 return self.SPACE or ws
             end
-            Unparser.unparse = function(self, ast)
+            function Unparser.unparse(self, ast)
                 if (ast.kind ~= AstKind.TopNode) then
                     logger.error(logger, 'Unparser:unparse expects a TopNode as first argument')
                 end
 
                 return self.unparseBlock(self, ast.body)
             end
-            Unparser.unparseBlock = function(self, block, tabbing)
+            function Unparser.unparseBlock(self, block, tabbing)
                 local code = ''
 
                 if (#block.statements < 1) then
@@ -4030,7 +3972,7 @@ do
 
                 return code
             end
-            Unparser.unparseStatement = function(self, statement, tabbing)
+            function Unparser.unparseStatement(self, statement, tabbing)
                 tabbing = tabbing and tabbing + 1 or 0
 
                 local code = ''
@@ -4044,13 +3986,11 @@ do
 
                     code = 'do' .. self.whitespaceIfNeeded(self, bodyCode, self.newline(self, true)) .. bodyCode .. self.newline(self, false) .. self.whitespaceIfNeeded2(self, bodyCode, self.tabs(self, tabbing, true)) .. 'end'
                 elseif (statement.kind == AstKind.WhileStatement) then
-                    local expressionCode = self.unparseExpression(self, statement.condition, tabbing)
-                    local bodyCode = self.unparseBlock(self, statement.body, tabbing)
+                    local expressionCode, bodyCode = self.unparseExpression(self, statement.condition, tabbing), self.unparseBlock(self, statement.body, tabbing)
 
                     code = 'while' .. self.whitespaceIfNeeded(self, expressionCode) .. expressionCode .. self.whitespaceIfNeeded2(self, expressionCode) .. 'do' .. self.whitespaceIfNeeded(self, bodyCode, self.newline(self, true)) .. bodyCode .. self.newline(self, false) .. self.whitespaceIfNeeded2(self, bodyCode, self.tabs(self, tabbing, true)) .. 'end'
                 elseif (statement.kind == AstKind.RepeatStatement) then
-                    local expressionCode = self.unparseExpression(self, statement.condition, tabbing)
-                    local bodyCode = self.unparseBlock(self, statement.body, tabbing)
+                    local expressionCode, bodyCode = self.unparseExpression(self, statement.condition, tabbing), self.unparseBlock(self, statement.body, tabbing)
 
                     code = 'repeat' .. self.whitespaceIfNeeded(self, bodyCode, self.newline(self, true)) .. bodyCode .. self.whitespaceIfNeeded2(self, bodyCode, self.newline(self) .. self.tabs(self, tabbing, true)) .. 'until' .. self.whitespaceIfNeeded(self, expressionCode) .. expressionCode
                 elseif (statement.kind == AstKind.ForStatement) then
@@ -4089,8 +4029,7 @@ do
 
                     code = code .. self.whitespaceIfNeeded2(self, code) .. 'do' .. self.whitespaceIfNeeded(self, bodyCode, self.newline(self, true)) .. bodyCode .. self.newline(self, false) .. self.whitespaceIfNeeded2(self, bodyCode, self.tabs(self, tabbing, true)) .. 'end'
                 elseif (statement.kind == AstKind.IfStatement) then
-                    local exprcode = self.unparseExpression(self, statement.condition, tabbing)
-                    local bodyCode = self.unparseBlock(self, statement.body, tabbing)
+                    local exprcode, bodyCode = self.unparseExpression(self, statement.condition, tabbing), self.unparseBlock(self, statement.body, tabbing)
 
                     code = 'if' .. self.whitespaceIfNeeded(self, exprcode) .. exprcode .. self.whitespaceIfNeeded2(self, exprcode) .. 'then' .. self.whitespaceIfNeeded(self, bodyCode, self.newline(self, true)) .. bodyCode
 
@@ -4295,7 +4234,7 @@ do
                 end
             end
 
-            Unparser.unparseExpression = function(self, expression, tabbing)
+            function Unparser.unparseExpression(self, expression, tabbing)
                 local code = ''
 
                 if (expression.kind == AstKind.BooleanExpression) then
@@ -4336,8 +4275,7 @@ do
                 local k = AstKind.OrExpression
 
                 if (expression.kind == k) then
-                    local lhs = self.unparseExpression(self, expression.lhs, tabbing)
-                    local rhs = self.unparseExpression(self, expression.rhs, tabbing)
+                    local lhs, rhs = self.unparseExpression(self, expression.lhs, tabbing), self.unparseExpression(self, expression.rhs, tabbing)
 
                     return lhs .. self.whitespaceIfNeeded2(self, lhs) .. 'or' .. self.whitespaceIfNeeded(self, rhs) .. rhs
                 end
@@ -4737,8 +4675,7 @@ do
                         return '{}'
                     end
 
-                    local inlineTable = #expression.entries <= 3
-                    local tableTabbing = tabbing + 1
+                    local inlineTable, tableTabbing = #expression.entries <= 3, tabbing + 1
 
                     code = '{'
 
@@ -4800,7 +4737,7 @@ do
             return Unparser
         end
 
-        __DARKLUA_BUNDLE_MODULES.k = function()
+        function __DARKLUA_BUNDLE_MODULES.k()
             local v = __DARKLUA_BUNDLE_MODULES.cache.k
 
             if not v then
@@ -4816,15 +4753,12 @@ do
     do
         local function __modImpl()
             local util = __DARKLUA_BUNDLE_MODULES.f()
-            local chararray = util.chararray
-            local idGen = 0
-            local VarDigits = chararray(
-[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_]])
-            local VarStartDigits = chararray('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+            local chararray, idGen = util.chararray, 0
+            local VarDigits, VarStartDigits = chararray
+[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_]], chararray'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
             return function(id, scope)
-                local name = ''
-                local d = id % #VarStartDigits
+                local name, d = '', id % #VarStartDigits
 
                 id = (id - d) / #VarStartDigits
                 name = name .. VarStartDigits[d + 1]
@@ -4840,7 +4774,7 @@ do
             end
         end
 
-        __DARKLUA_BUNDLE_MODULES.l = function()
+        function __DARKLUA_BUNDLE_MODULES.l()
             local v = __DARKLUA_BUNDLE_MODULES.cache.l
 
             if not v then
@@ -4857,13 +4791,11 @@ do
         local function __modImpl()
             local util = __DARKLUA_BUNDLE_MODULES.f()
             local chararray = util.chararray
-            local VarDigits = chararray(
-[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_]])
-            local VarStartDigits = chararray('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+            local VarDigits, VarStartDigits = chararray
+[[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_]], chararray'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
             local function generateName(id, scope)
-                local name = ''
-                local d = id % #VarStartDigits
+                local name, d = '', id % #VarStartDigits
 
                 id = (id - d) / #VarStartDigits
                 name = name .. VarStartDigits[d + 1]
@@ -4888,7 +4820,7 @@ do
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.m = function()
+        function __DARKLUA_BUNDLE_MODULES.m()
             local v = __DARKLUA_BUNDLE_MODULES.cache.m
 
             if not v then
@@ -4903,13 +4835,9 @@ do
     end
     do
         local function __modImpl()
-            local MIN_CHARACTERS = 5
-            local MAX_INITIAL_CHARACTERS = 10
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local chararray = util.chararray
-            local offset = 0
-            local VarDigits = chararray('Il1')
-            local VarStartDigits = chararray('Il')
+            local MIN_CHARACTERS, MAX_INITIAL_CHARACTERS, util = 5, 10, __DARKLUA_BUNDLE_MODULES.f()
+            local chararray, offset = util.chararray, 0
+            local VarDigits, VarStartDigits = chararray'Il1', chararray'Il'
 
             local function generateName(id, scope)
                 local name = ''
@@ -4943,7 +4871,7 @@ do
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.n = function()
+        function __DARKLUA_BUNDLE_MODULES.n()
             local v = __DARKLUA_BUNDLE_MODULES.cache.n
 
             if not v then
@@ -4965,7 +4893,7 @@ do
             end
         end
 
-        __DARKLUA_BUNDLE_MODULES.o = function()
+        function __DARKLUA_BUNDLE_MODULES.o()
             local v = __DARKLUA_BUNDLE_MODULES.cache.o
 
             if not v then
@@ -4981,8 +4909,7 @@ do
     do
         local function __modImpl()
             local util = __DARKLUA_BUNDLE_MODULES.f()
-            local chararray = util.chararray
-            local varNames = {
+            local chararray, varNames = util.chararray, {
                 'index',
                 'iterator',
                 'length',
@@ -5127,8 +5054,7 @@ do
             }
 
             local function generateName(id, scope)
-                local name = {}
-                local d = id % #varNames
+                local name, d = {}, id % #varNames
 
                 id = (id - d) / #varNames
 
@@ -5154,7 +5080,7 @@ do
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.p = function()
+        function __DARKLUA_BUNDLE_MODULES.p()
             local v = __DARKLUA_BUNDLE_MODULES.cache.p
 
             if not v then
@@ -5178,7 +5104,7 @@ do
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.q = function()
+        function __DARKLUA_BUNDLE_MODULES.q()
             local v = __DARKLUA_BUNDLE_MODULES.cache.q
 
             if not v then
@@ -5193,13 +5119,12 @@ do
     end
     do
         local function __modImpl()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local lookupify = util.lookupify
-            local Step = {}
+            local logger, util = __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.f()
+            local lookupify, Step = util.lookupify, {}
 
             Step.SettingsDescriptor = {}
-            Step.new = function(self, settings)
+
+            function Step.new(self, settings)
                 local instance = {}
 
                 setmetatable(instance, self)
@@ -5251,10 +5176,10 @@ do
 
                 return instance
             end
-            Step.init = function(self)
+            function Step.init(self)
                 logger.error(logger, 'Abstract Steps cannot be Created')
             end
-            Step.extend = function(self)
+            function Step.extend(self)
                 local ext = {}
 
                 setmetatable(ext, self)
@@ -5263,16 +5188,17 @@ do
 
                 return ext
             end
-            Step.apply = function(self, ast, pipeline)
+            function Step.apply(self, ast, pipeline)
                 logger.error(logger, 'Abstract Steps cannot be Applied')
             end
+
             Step.Name = 'Abstract Step'
             Step.Description = 'Abstract Step'
 
             return Step
         end
 
-        __DARKLUA_BUNDLE_MODULES.r = function()
+        function __DARKLUA_BUNDLE_MODULES.r()
             local v = __DARKLUA_BUNDLE_MODULES.cache.r
 
             if not v then
@@ -5287,9 +5213,7 @@ do
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
+            local Step, Ast, Scope = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i()
             local WrapInFunction = Step.extend(Step)
 
             WrapInFunction.Description = 'This Step Wraps the Entire Script into a Function'
@@ -5304,22 +5228,22 @@ do
                     max = nil,
                 },
             }
-            WrapInFunction.init = function(self, settings) end
-            WrapInFunction.apply = function(self, ast)
+
+            function WrapInFunction.init(self, settings) end
+            function WrapInFunction.apply(self, ast)
                 for i = 1, self.Iterations, 1 do
-                    local body = ast.body
-                    local scope = Scope.new(Scope, ast.globalScope)
+                    local body, scope = ast.body, Scope.new(Scope, ast.globalScope)
 
                     body.scope:setParent(scope)
 
                     ast.body = Ast.Block({
-                        Ast.ReturnStatement({
+                        Ast.ReturnStatement{
                             Ast.FunctionCallExpression(Ast.FunctionLiteralExpression({
                                 Ast.VarargExpression(),
                             }, body), {
                                 Ast.VarargExpression(),
                             }),
-                        }),
+                        },
                     }, scope)
                 end
             end
@@ -5327,7 +5251,7 @@ do
             return WrapInFunction
         end
 
-        __DARKLUA_BUNDLE_MODULES.s = function()
+        function __DARKLUA_BUNDLE_MODULES.s()
             local v = __DARKLUA_BUNDLE_MODULES.cache.s
 
             if not v then
@@ -5342,13 +5266,10 @@ do
     end
     do
         local function __modImpl()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local AstKind = Ast.AstKind
-            local lookupify = util.lookupify
-            local visitAst, visitBlock, visitStatement, visitExpression
+            local Ast, util = __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.f()
+            local AstKind, lookupify, visitAst, visitBlock, visitStatement, visitExpression = Ast.AstKind, util.lookupify, nil, nil, nil, nil
 
-            visitAst = function(ast, previsit, postvisit, data)
+            function visitAst(ast, previsit, postvisit, data)
                 ast.isAst = true
                 data = data or {}
                 data.scopeStack = {}
@@ -5389,7 +5310,7 @@ do
                 AstKind.CompoundConcatStatement,
             }
 
-            visitBlock = function(
+            function visitBlock(
                 block,
                 previsit,
                 postvisit,
@@ -5447,7 +5368,7 @@ do
 
                 return block
             end
-            visitStatement = function(statement, previsit, postvisit, data)
+            function visitStatement(statement, previsit, postvisit, data)
                 statement.isStatement = true
 
                 if (type(previsit) == 'function') then
@@ -5556,7 +5477,7 @@ do
                 AstKind.PowExpression,
             }
 
-            visitExpression = function(expression, previsit, postvisit, data)
+            function visitExpression(expression, previsit, postvisit, data)
                 expression.isExpression = true
 
                 if (type(previsit) == 'function') then
@@ -5621,7 +5542,7 @@ do
             return visitAst
         end
 
-        __DARKLUA_BUNDLE_MODULES.t = function()
+        function __DARKLUA_BUNDLE_MODULES.t()
             local v = __DARKLUA_BUNDLE_MODULES.cache.t
 
             if not v then
@@ -5636,14 +5557,8 @@ do
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local visitAst = __DARKLUA_BUNDLE_MODULES.t()
-            local Parser = __DARKLUA_BUNDLE_MODULES.j()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local enums = __DARKLUA_BUNDLE_MODULES.g()
-            local LuaVersion = enums.LuaVersion
-            local SplitStrings = Step.extend(Step)
+            local Step, Ast, visitAst, Parser, util, enums = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.t(), __DARKLUA_BUNDLE_MODULES.j(), __DARKLUA_BUNDLE_MODULES.f(), __DARKLUA_BUNDLE_MODULES.g()
+            local LuaVersion, SplitStrings = enums.LuaVersion, Step.extend(Step)
 
             SplitStrings.Description = 'This Step splits Strings to a specific or random length'
             SplitStrings.Name = 'Split Strings'
@@ -5708,7 +5623,8 @@ Note that when chosing inline, the code size may increase significantly!]],
                     min = 1,
                 },
             }
-            SplitStrings.init = function(self, settings) end
+
+            function SplitStrings.init(self, settings) end
 
             local function generateTableConcatNode(chunks, data)
                 local chunkNodes = {}
@@ -5737,13 +5653,10 @@ Note that when chosing inline, the code size may increase significantly!]],
                 return generatedNode
             end
 
-            local customVariants = 2
-            local custom1Code = 'function custom(table)\n    local stringTable, str = table[#table], "";\n    for i=1,#stringTable, 1 do\n        str = str .. stringTable[table[i]];\n\tend\n\treturn str\nend\n'
-            local custom2Code = 'function custom(tb)\n\tlocal str = "";\n\tfor i=1, #tb / 2, 1 do\n\t\tstr = str .. tb[#tb / 2 + tb[i]];\n\tend\n\treturn str\nend\n'
+            local customVariants, custom1Code, custom2Code = 2, 'function custom(table)\n    local stringTable, str = table[#table], "";\n    for i=1,#stringTable, 1 do\n        str = str .. stringTable[table[i]];\n\tend\n\treturn str\nend\n', 'function custom(tb)\n\tlocal str = "";\n\tfor i=1, #tb / 2, 1 do\n\t\tstr = str .. tb[#tb / 2 + tb[i]];\n\tend\n\treturn str\nend\n'
 
             local function generateCustomNodeArgs(chunks, data, variant)
-                local shuffled = {}
-                local shuffledIndices = {}
+                local shuffled, shuffledIndices = {}, {}
 
                 for i = 1, #chunks, 1 do
                     shuffledIndices[i] = i
@@ -5756,8 +5669,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                 end
 
                 if variant == 1 then
-                    local args = {}
-                    local tbNodes = {}
+                    local args, tbNodes = {}, {}
 
                     for i, v in ipairs(shuffledIndices)do
                         table.insert(args, Ast.TableEntry(Ast.NumberExpression(v)))
@@ -5795,16 +5707,14 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 if variant == 1 then
                     local funcDeclNode = parser.parse(parser, custom1Code).body.statements[1]
-                    local funcBody = funcDeclNode.body
-                    local funcArgs = funcDeclNode.args
+                    local funcBody, funcArgs = funcDeclNode.body, funcDeclNode.args
 
                     funcBody.scope:setParent(parentScope)
 
                     return Ast.FunctionLiteralExpression(funcArgs, funcBody)
                 else
                     local funcDeclNode = parser.parse(parser, custom2Code).body.statements[1]
-                    local funcBody = funcDeclNode.body
-                    local funcArgs = funcDeclNode.args
+                    local funcBody, funcArgs = funcDeclNode.body, funcDeclNode.args
 
                     funcBody.scope:setParent(parentScope)
 
@@ -5817,10 +5727,8 @@ Note that when chosing inline, the code size may increase significantly!]],
                 })
 
                 if data.customFunctionVariant == 1 then
-                    local astScope = ast.body.scope
-                    local funcDeclNode = parser.parse(parser, custom1Code).body.statements[1]
-                    local funcBody = funcDeclNode.body
-                    local funcArgs = funcDeclNode.args
+                    local astScope, funcDeclNode = ast.body.scope, parser.parse(parser, custom1Code).body.statements[1]
+                    local funcBody, funcArgs = funcDeclNode.body, funcDeclNode.args
 
                     funcBody.scope:setParent(astScope)
 
@@ -5830,10 +5738,8 @@ Note that when chosing inline, the code size may increase significantly!]],
                         Ast.FunctionLiteralExpression(funcArgs, funcBody),
                     })
                 else
-                    local astScope = ast.body.scope
-                    local funcDeclNode = parser.parse(parser, custom2Code).body.statements[1]
-                    local funcBody = funcDeclNode.body
-                    local funcArgs = funcDeclNode.args
+                    local astScope, funcDeclNode = ast.body.scope, parser.parse(parser, custom2Code).body.statements[1]
+                    local funcBody, funcArgs = funcDeclNode.body, funcDeclNode.args
 
                     funcBody.scope:setParent(astScope)
 
@@ -5845,10 +5751,10 @@ Note that when chosing inline, the code size may increase significantly!]],
                 end
             end
 
-            SplitStrings.variant = function(self)
+            function SplitStrings.variant(self)
                 return math.random(1, customVariants)
             end
-            SplitStrings.apply = function(self, ast, pipeline)
+            function SplitStrings.apply(self, ast, pipeline)
                 local data = {}
 
                 if (self.ConcatenationType == 'table') then
@@ -5870,8 +5776,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     end
                 end
 
-                local customLocalFunctionsCount = self.CustomLocalFunctionsCount
-                local self2 = self
+                local customLocalFunctionsCount, self2 = self.CustomLocalFunctionsCount, self
 
                 visitAst(ast, function(node, data)
                     if (self.ConcatenationType == 'custom' and data.customFunctionType == 'local' and node.kind == Ast.AstKind.Block and node.isFunctionBlock) then
@@ -5879,8 +5784,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                         for i = 1, customLocalFunctionsCount, 1 do
                             local scope = data.scope
-                            local id = scope.addVariable(scope)
-                            local variant = self.variant(self)
+                            local id, variant = scope.addVariable(scope), self.variant(self)
 
                             table.insert(data.functionData.localFunctions, {
                                 scope = scope,
@@ -5903,9 +5807,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         end
                     end
                     if (node.kind == Ast.AstKind.StringExpression) then
-                        local str = node.value
-                        local chunks = {}
-                        local i = 1
+                        local str, chunks, i = node.value, {}, 1
 
                         while i <= string.len(str) do
                             local len = math.random(self.MinLength, self.MaxLength)
@@ -5941,8 +5843,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                                         node = Ast.FunctionCallExpression(Ast.VariableExpression(func.scope, func.id), args)
                                     elseif self.CustomFunctionType == 'inline' then
                                         local variant = self.variant(self)
-                                        local args = generateCustomNodeArgs(chunks, data, variant)
-                                        local literal = generateCustomFunctionLiteral(data.scope, variant)
+                                        local args, literal = generateCustomNodeArgs(chunks, data, variant), generateCustomFunctionLiteral(data.scope, variant)
 
                                         node = Ast.FunctionCallExpression(literal, args)
                                     end
@@ -5962,7 +5863,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     table.insert(ast.body.statements, 1, Ast.LocalVariableDeclaration(data.tableConcatScope, {
                         data.tableConcatId,
                     }, {
-                        Ast.IndexExpression(Ast.VariableExpression(tableScope, tableId), Ast.StringExpression('concat')),
+                        Ast.IndexExpression(Ast.VariableExpression(tableScope, tableId), Ast.StringExpression'concat'),
                     }))
                 elseif (self.ConcatenationType == 'custom' and self.CustomFunctionType == 'global') then
                     table.insert(ast.body.statements, 1, generateGlobalCustomFunctionDeclaration(ast, data))
@@ -5972,7 +5873,7 @@ Note that when chosing inline, the code size may increase significantly!]],
             return SplitStrings
         end
 
-        __DARKLUA_BUNDLE_MODULES.u = function()
+        function __DARKLUA_BUNDLE_MODULES.u()
             local v = __DARKLUA_BUNDLE_MODULES.cache.u
 
             if not v then
@@ -5987,10 +5888,9 @@ Note that when chosing inline, the code size may increase significantly!]],
     end
     do
         local function __modImpl()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local utils = __DARKLUA_BUNDLE_MODULES.f()
-            local charset = utils.chararray(
-[[qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890]])
+            local Ast, utils = __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.f()
+            local charset = utils.chararray
+[[qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890]]
 
             local function randomString(wordsOrLen)
                 if type(wordsOrLen) == 'table' then
@@ -6015,7 +5915,7 @@ Note that when chosing inline, the code size may increase significantly!]],
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.v = function()
+        function __DARKLUA_BUNDLE_MODULES.v()
             local v = __DARKLUA_BUNDLE_MODULES.cache.v
 
             if not v then
@@ -6030,20 +5930,10 @@ Note that when chosing inline, the code size may increase significantly!]],
     end
     do
         local function __modImpl()
-            local MAX_REGS = 100
-            local MAX_REGS_MUL = 0
-            local Compiler = {}
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local visitast = __DARKLUA_BUNDLE_MODULES.t()
-            local randomStrings = __DARKLUA_BUNDLE_MODULES.v()
-            local lookupify = util.lookupify
-            local AstKind = Ast.AstKind
-            local unpack = unpack or table.unpack
+            local MAX_REGS, MAX_REGS_MUL, Compiler, Ast, Scope, logger, util, visitast, randomStrings = 100, 0, {}, __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.f(), __DARKLUA_BUNDLE_MODULES.t(), __DARKLUA_BUNDLE_MODULES.v()
+            local lookupify, AstKind, unpack = util.lookupify, Ast.AstKind, unpack or table.unpack
 
-            Compiler.new = function(self)
+            function Compiler.new(self)
                 local compiler = {
                     blocks = {},
                     registers = {},
@@ -6080,7 +5970,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return compiler
             end
-            Compiler.createBlock = function(self)
+            function Compiler.createBlock(self)
                 local id
 
                 repeat
@@ -6101,10 +5991,10 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return block
             end
-            Compiler.setActiveBlock = function(self, block)
+            function Compiler.setActiveBlock(self, block)
                 self.activeBlock = block
             end
-            Compiler.addStatement = function(
+            function Compiler.addStatement(
                 self,
                 statement,
                 writes,
@@ -6120,7 +6010,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     })
                 end
             end
-            Compiler.compile = function(self, ast)
+            function Compiler.compile(self, ast)
                 self.blocks = {}
                 self.registers = {}
                 self.activeBlock = nil
@@ -6135,8 +6025,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                 self.upvalsProxyLenReturn = math.random(-4194304, 4194304)
 
                 local newGlobalScope = Scope.newGlobal(Scope)
-                local psc = Scope.new(Scope, newGlobalScope, nil)
-                local _, getfenvVar = newGlobalScope.resolve(newGlobalScope, 'getfenv')
+                local psc, _, getfenvVar = Scope.new(Scope, newGlobalScope, nil), newGlobalScope.resolve(newGlobalScope, 'getfenv')
                 local _, tableVar = newGlobalScope.resolve(newGlobalScope, 'table')
                 local _, unpackVar = newGlobalScope.resolve(newGlobalScope, 'unpack')
                 local _, envVar = newGlobalScope.resolve(newGlobalScope, '_ENV')
@@ -6182,17 +6071,10 @@ Note that when chosing inline, the code size may increase significantly!]],
                 self.createVarargClosureVar = self.scope:addVariable()
 
                 local createClosureScope = Scope.new(Scope, self.scope)
-                local createClosurePosArg = createClosureScope.addVariable(createClosureScope)
-                local createClosureUpvalsArg = createClosureScope.addVariable(createClosureScope)
-                local createClosureProxyObject = createClosureScope.addVariable(createClosureScope)
-                local createClosureFuncVar = createClosureScope.addVariable(createClosureScope)
-                local createClosureSubScope = Scope.new(Scope, createClosureScope)
-                local upvalEntries = {}
-                local upvalueIds = {}
+                local createClosurePosArg, createClosureUpvalsArg, createClosureProxyObject, createClosureFuncVar, createClosureSubScope, upvalEntries, upvalueIds = createClosureScope.addVariable(createClosureScope), createClosureScope.addVariable(createClosureScope), createClosureScope.addVariable(createClosureScope), createClosureScope.addVariable(createClosureScope), Scope.new(Scope, createClosureScope), {}, {}
 
                 self.getUpvalueId = function(self, scope, id)
-                    local expression
-                    local scopeFuncDepth = self.scopeFunctionDepths[scope]
+                    local expression, scopeFuncDepth = nil, self.scopeFunctionDepths[scope]
 
                     if (scopeFuncDepth == 0) then
                         if upvalueIds[id] then
@@ -6220,7 +6102,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                 createClosureSubScope.addReferenceToHigherScope(createClosureSubScope, createClosureScope, createClosureProxyObject)
                 self.compileTopNode(self, ast)
 
-                local functionNodeAssignments = {
+                local functionNodeAssignments, tbl = {
                     {
                         var = Ast.AssignmentVariable(self.scope, self.containerFuncVar),
                         val = Ast.FunctionLiteralExpression({
@@ -6248,9 +6130,9 @@ Note that when chosing inline, the code size may increase significantly!]],
                                     Ast.ReturnStatement{
                                         Ast.FunctionCallExpression(Ast.VariableExpression(self.scope, self.containerFuncVar), {
                                             Ast.VariableExpression(createClosureScope, createClosurePosArg),
-                                            Ast.TableConstructorExpression({
+                                            Ast.TableConstructorExpression{
                                                 Ast.TableEntry(Ast.VarargExpression()),
-                                            }),
+                                            },
                                             Ast.VariableExpression(createClosureScope, createClosureUpvalsArg),
                                             Ast.VariableExpression(createClosureScope, createClosureProxyObject),
                                         }),
@@ -6264,11 +6146,11 @@ Note that when chosing inline, the code size may increase significantly!]],
                     },
                     {
                         var = Ast.AssignmentVariable(self.scope, self.upvaluesTable),
-                        val = Ast.TableConstructorExpression({}),
+                        val = Ast.TableConstructorExpression{},
                     },
                     {
                         var = Ast.AssignmentVariable(self.scope, self.upvaluesReferenceCountsTable),
-                        val = Ast.TableConstructorExpression({}),
+                        val = Ast.TableConstructorExpression{},
                     },
                     {
                         var = Ast.AssignmentVariable(self.scope, self.allocUpvalFunction),
@@ -6290,8 +6172,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         var = Ast.AssignmentVariable(self.scope, self.freeUpvalueFunc),
                         val = self.createFreeUpvalueFunc(self),
                     },
-                }
-                local tbl = {
+                }, {
                     Ast.VariableExpression(self.scope, self.containerFuncVar),
                     Ast.VariableExpression(self.scope, self.createVarargClosureVar),
                     Ast.VariableExpression(self.scope, self.upvaluesTable),
@@ -6344,27 +6225,22 @@ Note that when chosing inline, the code size may increase significantly!]],
                     Ast.ReturnStatement{
                         Ast.FunctionCallExpression(functionNode, {
                             Ast.OrExpression(Ast.AndExpression(Ast.VariableExpression(newGlobalScope, getfenvVar), Ast.FunctionCallExpression(Ast.VariableExpression(newGlobalScope, getfenvVar), {})), Ast.VariableExpression(newGlobalScope, envVar)),
-                            Ast.OrExpression(Ast.VariableExpression(newGlobalScope, unpackVar), Ast.IndexExpression(Ast.VariableExpression(newGlobalScope, tableVar), Ast.StringExpression('unpack'))),
+                            Ast.OrExpression(Ast.VariableExpression(newGlobalScope, unpackVar), Ast.IndexExpression(Ast.VariableExpression(newGlobalScope, tableVar), Ast.StringExpression'unpack')),
                             Ast.VariableExpression(newGlobalScope, newproxyVar),
                             Ast.VariableExpression(newGlobalScope, setmetatableVar),
                             Ast.VariableExpression(newGlobalScope, getmetatableVar),
                             Ast.VariableExpression(newGlobalScope, selectVar),
-                            Ast.TableConstructorExpression({
+                            Ast.TableConstructorExpression{
                                 Ast.TableEntry(Ast.VarargExpression()),
-                            }),
+                            },
                         }),
                     },
                 }, psc), newGlobalScope)
             end
-            Compiler.getCreateClosureVar = function(self, argCount)
+            function Compiler.getCreateClosureVar(self, argCount)
                 if not self.createClosureVars[argCount] then
-                    local var = Ast.AssignmentVariable(self.scope, self.scope:addVariable())
-                    local createClosureScope = Scope.new(Scope, self.scope)
-                    local createClosureSubScope = Scope.new(Scope, createClosureScope)
-                    local createClosurePosArg = createClosureScope.addVariable(createClosureScope)
-                    local createClosureUpvalsArg = createClosureScope.addVariable(createClosureScope)
-                    local createClosureProxyObject = createClosureScope.addVariable(createClosureScope)
-                    local createClosureFuncVar = createClosureScope.addVariable(createClosureScope)
+                    local var, createClosureScope = Ast.AssignmentVariable(self.scope, self.scope:addVariable()), Scope.new(Scope, self.scope)
+                    local createClosureSubScope, createClosurePosArg, createClosureUpvalsArg, createClosureProxyObject, createClosureFuncVar = Scope.new(Scope, createClosureScope), createClosureScope.addVariable(createClosureScope), createClosureScope.addVariable(createClosureScope), createClosureScope.addVariable(createClosureScope), createClosureScope.addVariable(createClosureScope)
 
                     createClosureSubScope.addReferenceToHigherScope(createClosureSubScope, self.scope, self.containerFuncVar)
                     createClosureSubScope.addReferenceToHigherScope(createClosureSubScope, createClosureScope, createClosurePosArg)
@@ -6417,7 +6293,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return var.scope, var.id
             end
-            Compiler.pushRegisterUsageInfo = function(self)
+            function Compiler.pushRegisterUsageInfo(self)
                 table.insert(self.registerUsageStack, {
                     usedRegisters = self.usedRegisters,
                     registers = self.registers,
@@ -6426,18 +6302,15 @@ Note that when chosing inline, the code size may increase significantly!]],
                 self.usedRegisters = 0
                 self.registers = {}
             end
-            Compiler.popRegisterUsageInfo = function(self)
+            function Compiler.popRegisterUsageInfo(self)
                 local info = table.remove(self.registerUsageStack)
 
                 self.usedRegisters = info.usedRegisters
                 self.registers = info.registers
             end
-            Compiler.createUpvaluesGcFunc = function(self)
+            function Compiler.createUpvaluesGcFunc(self)
                 local scope = Scope.new(Scope, self.scope)
-                local selfVar = scope.addVariable(scope)
-                local iteratorVar = scope.addVariable(scope)
-                local valueVar = scope.addVariable(scope)
-                local whileScope = Scope.new(Scope, scope)
+                local selfVar, iteratorVar, valueVar, whileScope = scope.addVariable(scope), scope.addVariable(scope), scope.addVariable(scope), Scope.new(Scope, scope)
 
                 whileScope.addReferenceToHigherScope(whileScope, self.scope, self.upvaluesReferenceCountsTable, 3)
                 whileScope.addReferenceToHigherScope(whileScope, scope, valueVar, 3)
@@ -6486,10 +6359,9 @@ Note that when chosing inline, the code size may increase significantly!]],
                     }, whileScope), Ast.VariableExpression(scope, valueVar), scope),
                 }, scope))
             end
-            Compiler.createFreeUpvalueFunc = function(self)
+            function Compiler.createFreeUpvalueFunc(self)
                 local scope = Scope.new(Scope, self.scope)
-                local argVar = scope.addVariable(scope)
-                local ifScope = Scope.new(Scope, scope)
+                local argVar, ifScope = scope.addVariable(scope), Scope.new(Scope, scope)
 
                 ifScope.addReferenceToHigherScope(ifScope, scope, argVar, 3)
                 scope.addReferenceToHigherScope(scope, self.scope, self.upvaluesReferenceCountsTable, 2)
@@ -6516,16 +6388,13 @@ Note that when chosing inline, the code size may increase significantly!]],
                     }, ifScope), {}, nil),
                 }, scope))
             end
-            Compiler.createUpvaluesProxyFunc = function(self)
+            function Compiler.createUpvaluesProxyFunc(self)
                 local scope = Scope.new(Scope, self.scope)
 
                 scope.addReferenceToHigherScope(scope, self.scope, self.newproxyVar)
 
-                local entriesVar = scope.addVariable(scope)
-                local ifScope = Scope.new(Scope, scope)
-                local proxyVar = ifScope.addVariable(ifScope)
-                local metatableVar = ifScope.addVariable(ifScope)
-                local elseScope = Scope.new(Scope, scope)
+                local entriesVar, ifScope = scope.addVariable(scope), Scope.new(Scope, scope)
+                local proxyVar, metatableVar, elseScope = ifScope.addVariable(ifScope), ifScope.addVariable(ifScope), Scope.new(Scope, scope)
 
                 ifScope.addReferenceToHigherScope(ifScope, self.scope, self.newproxyVar)
                 ifScope.addReferenceToHigherScope(ifScope, self.scope, self.getmetatableVar)
@@ -6566,40 +6435,40 @@ Note that when chosing inline, the code size may increase significantly!]],
                             }),
                         }),
                         Ast.AssignmentStatement({
-                            Ast.AssignmentIndexing(Ast.VariableExpression(ifScope, metatableVar), Ast.StringExpression('__index')),
-                            Ast.AssignmentIndexing(Ast.VariableExpression(ifScope, metatableVar), Ast.StringExpression('__gc')),
-                            Ast.AssignmentIndexing(Ast.VariableExpression(ifScope, metatableVar), Ast.StringExpression('__len')),
+                            Ast.AssignmentIndexing(Ast.VariableExpression(ifScope, metatableVar), Ast.StringExpression'__index'),
+                            Ast.AssignmentIndexing(Ast.VariableExpression(ifScope, metatableVar), Ast.StringExpression'__gc'),
+                            Ast.AssignmentIndexing(Ast.VariableExpression(ifScope, metatableVar), Ast.StringExpression'__len'),
                         }, {
                             Ast.VariableExpression(scope, entriesVar),
                             Ast.VariableExpression(self.scope, self.upvaluesGcFunctionVar),
                             Ast.FunctionLiteralExpression({}, Ast.Block({
-                                Ast.ReturnStatement({
+                                Ast.ReturnStatement{
                                     Ast.NumberExpression(self.upvalsProxyLenReturn),
-                                }),
+                                },
                             }, Scope.new(Scope, ifScope))),
                         }),
-                        Ast.ReturnStatement({
+                        Ast.ReturnStatement{
                             Ast.VariableExpression(ifScope, proxyVar),
-                        }),
+                        },
                     }, ifScope), {}, Ast.Block({
-                        Ast.ReturnStatement({
+                        Ast.ReturnStatement{
                             Ast.FunctionCallExpression(Ast.VariableExpression(self.scope, self.setmetatableVar), {
-                                Ast.TableConstructorExpression({}),
-                                Ast.TableConstructorExpression({
-                                    Ast.KeyedTableEntry(Ast.StringExpression('__gc'), Ast.VariableExpression(self.scope, self.upvaluesGcFunctionVar)),
-                                    Ast.KeyedTableEntry(Ast.StringExpression('__index'), Ast.VariableExpression(scope, entriesVar)),
-                                    Ast.KeyedTableEntry(Ast.StringExpression('__len'), Ast.FunctionLiteralExpression({}, Ast.Block({
-                                        Ast.ReturnStatement({
+                                Ast.TableConstructorExpression{},
+                                Ast.TableConstructorExpression{
+                                    Ast.KeyedTableEntry(Ast.StringExpression'__gc', Ast.VariableExpression(self.scope, self.upvaluesGcFunctionVar)),
+                                    Ast.KeyedTableEntry(Ast.StringExpression'__index', Ast.VariableExpression(scope, entriesVar)),
+                                    Ast.KeyedTableEntry(Ast.StringExpression'__len', Ast.FunctionLiteralExpression({}, Ast.Block({
+                                        Ast.ReturnStatement{
                                             Ast.NumberExpression(self.upvalsProxyLenReturn),
-                                        }),
+                                        },
                                     }, Scope.new(Scope, ifScope)))),
-                                }),
+                                },
                             }),
-                        }),
+                        },
                     }, elseScope)),
                 }, scope))
             end
-            Compiler.createAllocUpvalFunction = function(self)
+            function Compiler.createAllocUpvalFunction(self)
                 local scope = Scope.new(Scope, self.scope)
 
                 scope.addReferenceToHigherScope(scope, self.scope, self.currentUpvalId, 4)
@@ -6609,36 +6478,32 @@ Note that when chosing inline, the code size may increase significantly!]],
                     Ast.AssignmentStatement({
                         Ast.AssignmentVariable(self.scope, self.currentUpvalId),
                     }, {
-                        Ast.AddExpression(unpack(util.shuffle({
+                        Ast.AddExpression(unpack(util.shuffle{
                             Ast.VariableExpression(self.scope, self.currentUpvalId),
                             Ast.NumberExpression(1),
-                        }))),
+                        })),
                     }),
                     Ast.AssignmentStatement({
                         Ast.AssignmentIndexing(Ast.VariableExpression(self.scope, self.upvaluesReferenceCountsTable), Ast.VariableExpression(self.scope, self.currentUpvalId)),
                     }, {
                         Ast.NumberExpression(1),
                     }),
-                    Ast.ReturnStatement({
+                    Ast.ReturnStatement{
                         Ast.VariableExpression(self.scope, self.currentUpvalId),
-                    }),
+                    },
                 }, scope))
             end
-            Compiler.emitContainerFuncBody = function(self)
+            function Compiler.emitContainerFuncBody(self)
                 local blocks = {}
 
                 util.shuffle(self.blocks)
 
                 for _, block in ipairs(self.blocks)do
-                    local id = block.id
-                    local blockstats = block.statements
+                    local id, blockstats = block.id, block.statements
 
                     for i = 2, #blockstats do
                         local stat = blockstats[i]
-                        local reads = stat.reads
-                        local writes = stat.writes
-                        local maxShift = 0
-                        local usesUpvals = stat.usesUpvals
+                        local reads, writes, maxShift, usesUpvals = stat.reads, stat.writes, 0, stat.usesUpvals
 
                         for shift = 1, i - 1 do
                             local stat2 = blockstats[i - shift]
@@ -6647,9 +6512,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                                 break
                             end
 
-                            local reads2 = stat2.reads
-                            local writes2 = stat2.writes
-                            local f = true
+                            local reads2, writes2, f = stat2.reads, stat2.writes, true
 
                             for r, b in pairs(reads2)do
                                 if (writes[r]) then
@@ -6720,10 +6583,8 @@ Note that when chosing inline, the code size may increase significantly!]],
                     end
 
                     local mid = l + math.ceil(len / 2)
-                    local bound = math.random(tb[mid - 1].id + 1, tb[mid].id)
-                    local ifScope = scope or Scope.new(Scope, pScope)
-                    local lBlock = buildWhileBody(tb, l, mid - 1, ifScope)
-                    local rBlock = buildWhileBody(tb, mid, r, ifScope)
+                    local bound, ifScope = math.random(tb[mid - 1].id + 1, tb[mid].id), scope or Scope.new(Scope, pScope)
+                    local lBlock, rBlock = buildWhileBody(tb, l, mid - 1, ifScope), buildWhileBody(tb, mid, r, ifScope)
 
                     return buildIfBlock(ifScope, bound, lBlock, rBlock)
                 end
@@ -6763,22 +6624,22 @@ Note that when chosing inline, the code size may increase significantly!]],
                     table.insert(stats, 1, Ast.LocalVariableDeclaration(self.containerFuncScope, {
                         self.registerVars[MAX_REGS],
                     }, {
-                        Ast.TableConstructorExpression({}),
+                        Ast.TableConstructorExpression{},
                     }))
                 end
 
                 return Ast.Block(stats, self.containerFuncScope)
             end
-            Compiler.freeRegister = function(self, id, force)
+            function Compiler.freeRegister(self, id, force)
                 if force or not (self.registers[id] == self.VAR_REGISTER) then
                     self.usedRegisters = self.usedRegisters - 1
                     self.registers[id] = false
                 end
             end
-            Compiler.isVarRegister = function(self, id)
+            function Compiler.isVarRegister(self, id)
                 return self.registers[id] == self.VAR_REGISTER
             end
-            Compiler.allocRegister = function(self, isVar)
+            function Compiler.allocRegister(self, isVar)
                 self.usedRegisters = self.usedRegisters + 1
 
                 if not isVar then
@@ -6816,17 +6677,17 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return id
             end
-            Compiler.isUpvalue = function(self, scope, id)
+            function Compiler.isUpvalue(self, scope, id)
                 return self.upvalVars[scope] and self.upvalVars[scope][id]
             end
-            Compiler.makeUpvalue = function(self, scope, id)
+            function Compiler.makeUpvalue(self, scope, id)
                 if (not self.upvalVars[scope]) then
                     self.upvalVars[scope] = {}
                 end
 
                 self.upvalVars[scope][id] = true
             end
-            Compiler.getVarRegister = function(
+            function Compiler.getVarRegister(
                 self,
                 scope,
                 id,
@@ -6853,7 +6714,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return reg
             end
-            Compiler.getRegisterVarId = function(self, id)
+            function Compiler.getRegisterVarId(self, id)
                 local varId = self.registerVars[id]
 
                 if not varId then
@@ -6863,7 +6724,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return varId
             end
-            Compiler.register = function(self, scope, id)
+            function Compiler.register(self, scope, id)
                 if id == self.POS_REGISTER then
                     return self.pos(self, scope)
                 end
@@ -6884,7 +6745,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return Ast.IndexExpression(Ast.VariableExpression(self.containerFuncScope, vid), Ast.NumberExpression((id - MAX_REGS) + 1))
             end
-            Compiler.registerList = function(self, scope, ids)
+            function Compiler.registerList(self, scope, ids)
                 local l = {}
 
                 for i, id in ipairs(ids)do
@@ -6893,7 +6754,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return l
             end
-            Compiler.registerAssignment = function(self, scope, id)
+            function Compiler.registerAssignment(self, scope, id)
                 if id == self.POS_REGISTER then
                     return self.posAssignment(self, scope)
                 end
@@ -6914,7 +6775,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return Ast.AssignmentIndexing(Ast.VariableExpression(self.containerFuncScope, vid), Ast.NumberExpression((id - MAX_REGS) + 1))
             end
-            Compiler.setRegister = function(self, scope, id, val, compundArg)
+            function Compiler.setRegister(self, scope, id, val, compundArg)
                 if (compundArg) then
                     return compundArg(self.registerAssignment(self, scope, id), val)
                 end
@@ -6923,7 +6784,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     self.registerAssignment(self, scope, id),
                 }, {val})
             end
-            Compiler.setRegisters = function(self, scope, ids, vals)
+            function Compiler.setRegisters(self, scope, ids, vals)
                 local idStats = {}
 
                 for i, id in ipairs(ids)do
@@ -6932,9 +6793,8 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return Ast.AssignmentStatement(idStats, vals)
             end
-            Compiler.copyRegisters = function(self, scope, to, from)
-                local idStats = {}
-                local vals = {}
+            function Compiler.copyRegisters(self, scope, to, from)
+                local idStats, vals = {}, {}
 
                 for i, id in ipairs(to)do
                     local from = from[i]
@@ -6949,42 +6809,42 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return Ast.AssignmentStatement(idStats, vals)
                 end
             end
-            Compiler.resetRegisters = function(self)
+            function Compiler.resetRegisters(self)
                 self.registers = {}
             end
-            Compiler.pos = function(self, scope)
+            function Compiler.pos(self, scope)
                 scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.posVar)
 
                 return Ast.VariableExpression(self.containerFuncScope, self.posVar)
             end
-            Compiler.posAssignment = function(self, scope)
+            function Compiler.posAssignment(self, scope)
                 scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.posVar)
 
                 return Ast.AssignmentVariable(self.containerFuncScope, self.posVar)
             end
-            Compiler.args = function(self, scope)
+            function Compiler.args(self, scope)
                 scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.argsVar)
 
                 return Ast.VariableExpression(self.containerFuncScope, self.argsVar)
             end
-            Compiler.unpack = function(self, scope)
+            function Compiler.unpack(self, scope)
                 scope.addReferenceToHigherScope(scope, self.scope, self.unpackVar)
 
                 return Ast.VariableExpression(self.scope, self.unpackVar)
             end
-            Compiler.env = function(self, scope)
+            function Compiler.env(self, scope)
                 scope.addReferenceToHigherScope(scope, self.scope, self.envVar)
 
                 return Ast.VariableExpression(self.scope, self.envVar)
             end
-            Compiler.jmp = function(self, scope, to)
+            function Compiler.jmp(self, scope, to)
                 scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.posVar)
 
                 return Ast.AssignmentStatement({
                     Ast.AssignmentVariable(self.containerFuncScope, self.posVar),
                 }, {to})
             end
-            Compiler.setPos = function(self, scope, val)
+            function Compiler.setPos(self, scope, val)
                 if not val then
                     local v = Ast.IndexExpression(self.env(self, scope), randomStrings.randomStringNode(math.random(12, 14)))
 
@@ -7003,24 +6863,24 @@ Note that when chosing inline, the code size may increase significantly!]],
                     Ast.NumberExpression(val) or Ast.NilExpression(),
                 })
             end
-            Compiler.setReturn = function(self, scope, val)
+            function Compiler.setReturn(self, scope, val)
                 scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.returnVar)
 
                 return Ast.AssignmentStatement({
                     Ast.AssignmentVariable(self.containerFuncScope, self.returnVar),
                 }, {val})
             end
-            Compiler.getReturn = function(self, scope)
+            function Compiler.getReturn(self, scope)
                 scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.returnVar)
 
                 return Ast.VariableExpression(self.containerFuncScope, self.returnVar)
             end
-            Compiler.returnAssignment = function(self, scope)
+            function Compiler.returnAssignment(self, scope)
                 scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.returnVar)
 
                 return Ast.AssignmentVariable(self.containerFuncScope, self.returnVar)
             end
-            Compiler.setUpvalueMember = function(
+            function Compiler.setUpvalueMember(
                 self,
                 scope,
                 idExpr,
@@ -7037,12 +6897,12 @@ Note that when chosing inline, the code size may increase significantly!]],
                     Ast.AssignmentIndexing(Ast.VariableExpression(self.scope, self.upvaluesTable), idExpr),
                 }, {valExpr})
             end
-            Compiler.getUpvalueMember = function(self, scope, idExpr)
+            function Compiler.getUpvalueMember(self, scope, idExpr)
                 scope.addReferenceToHigherScope(scope, self.scope, self.upvaluesTable)
 
                 return Ast.IndexExpression(Ast.VariableExpression(self.scope, self.upvaluesTable), idExpr)
             end
-            Compiler.compileTopNode = function(self, node)
+            function Compiler.compileTopNode(self, node)
                 local startBlock = self.createBlock(self)
                 local scope = startBlock.scope
 
@@ -7050,13 +6910,12 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 self.setActiveBlock(self, startBlock)
 
-                local varAccessLookup = lookupify{
+                local varAccessLookup, functionLookup = lookupify{
                     AstKind.AssignmentVariable,
                     AstKind.VariableExpression,
                     AstKind.FunctionDeclaration,
                     AstKind.LocalFunctionDeclaration,
-                }
-                local functionLookup = lookupify{
+                }, lookupify{
                     AstKind.FunctionDeclaration,
                     AstKind.LocalFunctionDeclaration,
                     AstKind.FunctionLiteralExpression,
@@ -7092,7 +6951,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     self.addStatement(self, self.setPos(self, self.activeBlock.scope, nil), {
                         self.POS_REGISTER,
                     }, {}, false)
-                    self.addStatement(self, self.setReturn(self, self.activeBlock.scope, Ast.TableConstructorExpression({})), {
+                    self.addStatement(self, self.setReturn(self, self.activeBlock.scope, Ast.TableConstructorExpression{}), {
                         self.RETURN_REGISTER,
                     }, {}, false)
 
@@ -7101,18 +6960,14 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 self.resetRegisters(self)
             end
-            Compiler.compileFunction = function(self, node, funcDepth)
+            function Compiler.compileFunction(self, node, funcDepth)
                 funcDepth = funcDepth + 1
 
-                local oldActiveBlock = self.activeBlock
-                local upperVarargReg = self.varargReg
+                local oldActiveBlock, upperVarargReg = self.activeBlock, self.varargReg
 
                 self.varargReg = nil
 
-                local upvalueExpressions = {}
-                local upvalueIds = {}
-                local usedRegs = {}
-                local oldGetUpvalueId = self.getUpvalueId
+                local upvalueExpressions, upvalueIds, usedRegs, oldGetUpvalueId = {}, {}, {}, self.getUpvalueId
 
                 self.getUpvalueId = function(self, scope, id)
                     if (not upvalueIds[scope]) then
@@ -7122,8 +6977,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         return upvalueIds[scope][id]
                     end
 
-                    local scopeFuncDepth = self.scopeFunctionDepths[scope]
-                    local expression
+                    local scopeFuncDepth, expression = self.scopeFunctionDepths[scope], nil
 
                     if (scopeFuncDepth == funcDepth) then
                         oldActiveBlock.scope:addReferenceToHigherScope(self.scope, self.allocUpvalFunction)
@@ -7181,14 +7035,14 @@ Note that when chosing inline, the code size may increase significantly!]],
                         scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.argsVar)
                         scope.addReferenceToHigherScope(scope, self.scope, self.selectVar)
                         scope.addReferenceToHigherScope(scope, self.scope, self.unpackVar)
-                        self.addStatement(self, self.setRegister(self, scope, self.varargReg, Ast.TableConstructorExpression({
+                        self.addStatement(self, self.setRegister(self, scope, self.varargReg, Ast.TableConstructorExpression{
                             Ast.TableEntry(Ast.FunctionCallExpression(Ast.VariableExpression(self.scope, self.selectVar), {
                                 Ast.NumberExpression(i),
                                 Ast.FunctionCallExpression(Ast.VariableExpression(self.scope, self.unpackVar), {
                                     Ast.VariableExpression(self.containerFuncScope, self.argsVar),
                                 }),
                             })),
-                        })), {
+                        }), {
                             self.varargReg,
                         }, {}, false)
                     end
@@ -7200,7 +7054,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     self.addStatement(self, self.setPos(self, self.activeBlock.scope, nil), {
                         self.POS_REGISTER,
                     }, {}, false)
-                    self.addStatement(self, self.setReturn(self, self.activeBlock.scope, Ast.TableConstructorExpression({})), {
+                    self.addStatement(self, self.setReturn(self, self.activeBlock.scope, Ast.TableConstructorExpression{}), {
                         self.RETURN_REGISTER,
                     }, {}, false)
 
@@ -7216,10 +7070,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                 self.popRegisterUsageInfo(self)
                 self.setActiveBlock(self, oldActiveBlock)
 
-                local scope = self.activeBlock.scope
-                local retReg = self.allocRegister(self, false)
-                local isVarargFunction = #node.args > 0 and node.args[#node.args].kind == AstKind.VarargExpression
-                local retrieveExpression
+                local scope, retReg, isVarargFunction, retrieveExpression = self.activeBlock.scope, self.allocRegister(self, false), #node.args > 0 and node.args[#node.args].kind == AstKind.VarargExpression, nil
 
                 if isVarargFunction then
                     scope.addReferenceToHigherScope(scope, self.scope, self.createVarargClosureVar)
@@ -7243,7 +7094,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return retReg
             end
-            Compiler.compileBlock = function(self, block, funcDepth)
+            function Compiler.compileBlock(self, block, funcDepth)
                 for i, stat in ipairs(block.statements)do
                     self.compileStatement(self, stat, funcDepth)
                 end
@@ -7265,12 +7116,11 @@ Note that when chosing inline, the code size may increase significantly!]],
                     self.freeRegister(self, varReg, true)
                 end
             end
-            Compiler.compileStatement = function(self, statement, funcDepth)
+            function Compiler.compileStatement(self, statement, funcDepth)
                 local scope = self.activeBlock.scope
 
                 if (statement.kind == AstKind.ReturnStatement) then
-                    local entries = {}
-                    local regs = {}
+                    local entries, regs = {}, {}
 
                     for i, expr in ipairs(statement.args)do
                         if i == #statement.args and (expr.kind == AstKind.FunctionCallExpression or expr.kind == AstKind.PassSelfFunctionCallExpression or expr.kind == AstKind.VarargExpression) then
@@ -7330,8 +7180,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     for i, id in ipairs(statement.ids)do
                         if (exprregs[i]) then
                             if (self.isUpvalue(self, statement.scope, id)) then
-                                local varreg = self.getVarRegister(self, statement.scope, id, funcDepth)
-                                local varReg = self.getVarRegister(self, statement.scope, id, funcDepth, nil)
+                                local varreg, varReg = self.getVarRegister(self, statement.scope, id, funcDepth), self.getVarRegister(self, statement.scope, id, funcDepth, nil)
 
                                 scope.addReferenceToHigherScope(scope, self.scope, self.allocUpvalFunction)
                                 self.addStatement(self, self.setRegister(self, scope, varReg, Ast.FunctionCallExpression(Ast.VariableExpression(self.scope, self.allocUpvalFunction), {})), {varReg}, {}, false)
@@ -7360,10 +7209,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.FunctionCallStatement) then
-                    local baseReg = self.compileExpression(self, statement.base, funcDepth, 1)[1]
-                    local retReg = self.allocRegister(self, false)
-                    local regs = {}
-                    local args = {}
+                    local baseReg, retReg, regs, args = self.compileExpression(self, statement.base, funcDepth, 1)[1], self.allocRegister(self, false), {}, {}
 
                     for i, expr in ipairs(statement.args)do
                         if i == #statement.args and (expr.kind == AstKind.FunctionCallExpression or expr.kind == AstKind.PassSelfFunctionCallExpression or expr.kind == AstKind.VarargExpression) then
@@ -7395,12 +7241,10 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.PassSelfFunctionCallStatement) then
-                    local baseReg = self.compileExpression(self, statement.base, funcDepth, 1)[1]
-                    local tmpReg = self.allocRegister(self, false)
-                    local args = {
+                    local baseReg, tmpReg = self.compileExpression(self, statement.base, funcDepth, 1)[1], self.allocRegister(self, false)
+                    local args, regs = {
                         self.register(self, scope, baseReg),
-                    }
-                    local regs = {baseReg}
+                    }, {baseReg}
 
                     for i, expr in ipairs(statement.args)do
                         if i == #statement.args and (expr.kind == AstKind.FunctionCallExpression or expr.kind == AstKind.PassSelfFunctionCallExpression or expr.kind == AstKind.VarargExpression) then
@@ -7487,8 +7331,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                         for i = 1, #statement.indices - 1 do
                             local index = statement.indices[i]
-                            local indexReg = self.compileExpression(self, Ast.StringExpression(index), funcDepth, 1)[1]
-                            local tblRegOld = tblReg
+                            local indexReg, tblRegOld = self.compileExpression(self, Ast.StringExpression(index), funcDepth, 1)[1], tblReg
 
                             tblReg = self.allocRegister(self, false)
 
@@ -7547,8 +7390,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.AssignmentStatement) then
-                    local exprregs = {}
-                    local assignmentIndexingRegs = {}
+                    local exprregs, assignmentIndexingRegs = {}, {}
 
                     for i, primaryExpr in ipairs(statement.lhs)do
                         if (primaryExpr.kind == AstKind.AssignmentIndexing) then
@@ -7632,8 +7474,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                                 end
                             end
                         elseif primaryExpr.kind == AstKind.AssignmentIndexing then
-                            local baseReg = assignmentIndexingRegs[i].base
-                            local indexReg = assignmentIndexingRegs[i].index
+                            local baseReg, indexReg = assignmentIndexingRegs[i].base, assignmentIndexingRegs[i].index
 
                             self.addStatement(self, Ast.AssignmentStatement({
                                 Ast.AssignmentIndexing(self.register(self, scope, baseReg), self.register(self, scope, indexReg)),
@@ -7655,9 +7496,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.IfStatement) then
-                    local conditionReg = self.compileExpression(self, statement.condition, funcDepth, 1)[1]
-                    local finalBlock = self.createBlock(self)
-                    local nextBlock
+                    local conditionReg, finalBlock, nextBlock = self.compileExpression(self, statement.condition, funcDepth, 1)[1], self.createBlock(self), nil
 
                     if statement.elsebody or #statement.elseifs > 0 then
                         nextBlock = self.createBlock(self)
@@ -7727,9 +7566,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.WhileStatement) then
-                    local innerBlock = self.createBlock(self)
-                    local finalBlock = self.createBlock(self)
-                    local checkBlock = self.createBlock(self)
+                    local innerBlock, finalBlock, checkBlock = self.createBlock(self), self.createBlock(self), self.createBlock(self)
 
                     statement.__start_block = checkBlock
                     statement.__final_block = finalBlock
@@ -7739,8 +7576,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     }, {}, false)
                     self.setActiveBlock(self, checkBlock)
 
-                    local scope = self.activeBlock.scope
-                    local conditionReg = self.compileExpression(self, statement.condition, funcDepth, 1)[1]
+                    local scope, conditionReg = self.activeBlock.scope, self.compileExpression(self, statement.condition, funcDepth, 1)[1]
 
                     self.addStatement(self, self.setRegister(self, scope, self.POS_REGISTER, Ast.OrExpression(Ast.AndExpression(self.register(self, scope, conditionReg), Ast.NumberExpression(innerBlock.id)), Ast.NumberExpression(finalBlock.id))), {
                         self.POS_REGISTER,
@@ -7759,9 +7595,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.RepeatStatement) then
-                    local innerBlock = self.createBlock(self)
-                    local finalBlock = self.createBlock(self)
-                    local checkBlock = self.createBlock(self)
+                    local innerBlock, finalBlock, checkBlock = self.createBlock(self), self.createBlock(self), self.createBlock(self)
 
                     statement.__start_block = checkBlock
                     statement.__final_block = finalBlock
@@ -7782,8 +7616,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     }, {}, false)
                     self.setActiveBlock(self, checkBlock)
 
-                    local scope = self.activeBlock.scope
-                    local conditionReg = self.compileExpression(self, statement.condition, funcDepth, 1)[1]
+                    local scope, conditionReg = self.activeBlock.scope, self.compileExpression(self, statement.condition, funcDepth, 1)[1]
 
                     self.addStatement(self, self.setRegister(self, scope, self.POS_REGISTER, Ast.OrExpression(Ast.AndExpression(self.register(self, scope, conditionReg), Ast.NumberExpression(finalBlock.id)), Ast.NumberExpression(innerBlock.id))), {
                         self.POS_REGISTER,
@@ -7794,9 +7627,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.ForStatement) then
-                    local checkBlock = self.createBlock(self)
-                    local innerBlock = self.createBlock(self)
-                    local finalBlock = self.createBlock(self)
+                    local checkBlock, innerBlock, finalBlock = self.createBlock(self), self.createBlock(self), self.createBlock(self)
 
                     statement.__start_block = checkBlock
                     statement.__final_block = finalBlock
@@ -7805,15 +7636,12 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                     self.registers[self.POS_REGISTER] = self.VAR_REGISTER
 
-                    local initialReg = self.compileExpression(self, statement.initialValue, funcDepth, 1)[1]
-                    local finalExprReg = self.compileExpression(self, statement.finalValue, funcDepth, 1)[1]
-                    local finalReg = self.allocRegister(self, false)
+                    local initialReg, finalExprReg, finalReg = self.compileExpression(self, statement.initialValue, funcDepth, 1)[1], self.compileExpression(self, statement.finalValue, funcDepth, 1)[1], self.allocRegister(self, false)
 
                     self.addStatement(self, self.copyRegisters(self, scope, {finalReg}, {finalExprReg}), {finalReg}, {finalExprReg}, false)
                     self.freeRegister(self, finalExprReg)
 
-                    local incrementExprReg = self.compileExpression(self, statement.incrementBy, funcDepth, 1)[1]
-                    local incrementReg = self.allocRegister(self, false)
+                    local incrementExprReg, incrementReg = self.compileExpression(self, statement.incrementBy, funcDepth, 1)[1], self.allocRegister(self, false)
 
                     self.addStatement(self, self.copyRegisters(self, scope, {incrementReg}, {incrementExprReg}), {incrementReg}, {incrementExprReg}, false)
                     self.freeRegister(self, incrementExprReg)
@@ -7840,8 +7668,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                     self.addStatement(self, self.setRegister(self, scope, currentReg, Ast.AddExpression(self.register(self, scope, currentReg), self.register(self, scope, incrementReg))), {currentReg}, {currentReg, incrementReg}, false)
 
-                    local tmpReg1 = self.allocRegister(self, false)
-                    local tmpReg2 = self.allocRegister(self, false)
+                    local tmpReg1, tmpReg2 = self.allocRegister(self, false), self.allocRegister(self, false)
 
                     self.addStatement(self, self.setRegister(self, scope, tmpReg2, Ast.NotExpression(self.register(self, scope, incrementIsNegReg))), {tmpReg2}, {incrementIsNegReg}, false)
                     self.addStatement(self, self.setRegister(self, scope, tmpReg1, Ast.LessThanOrEqualsExpression(self.register(self, scope, currentReg), self.register(self, scope, finalReg))), {tmpReg1}, {currentReg, finalReg}, false)
@@ -7902,8 +7729,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.ForInStatement) then
-                    local expressionsLength = #statement.expressions
-                    local exprregs = {}
+                    local expressionsLength, exprregs = #statement.expressions, {}
 
                     for i, expr in ipairs(statement.expressions)do
                         if (i == expressionsLength and expressionsLength < 3) then
@@ -7934,9 +7760,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         end
                     end
 
-                    local checkBlock = self.createBlock(self)
-                    local bodyBlock = self.createBlock(self)
-                    local finalBlock = self.createBlock(self)
+                    local checkBlock, bodyBlock, finalBlock = self.createBlock(self), self.createBlock(self), self.createBlock(self)
 
                     statement.__start_block = checkBlock
                     statement.__final_block = finalBlock
@@ -7946,8 +7770,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     }, {}, false)
                     self.setActiveBlock(self, checkBlock)
 
-                    local scope = self.activeBlock.scope
-                    local varRegs = {}
+                    local scope, varRegs = self.activeBlock.scope, {}
 
                     for i, id in ipairs(statement.ids)do
                         varRegs[i] = self.getVarRegister(self, statement.scope, id, funcDepth)
@@ -8000,8 +7823,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                     for i, id in ipairs(statement.ids)do
                         if (self.isUpvalue(self, statement.scope, id)) then
-                            local varreg = varRegs[i]
-                            local tmpReg = self.allocRegister(self, false)
+                            local varreg, tmpReg = varRegs[i], self.allocRegister(self, false)
 
                             scope.addReferenceToHigherScope(scope, self.scope, self.allocUpvalFunction)
                             self.addStatement(self, self.setRegister(self, scope, tmpReg, Ast.FunctionCallExpression(Ast.VariableExpression(self.scope, self.allocUpvalFunction), {})), {tmpReg}, {}, false)
@@ -8029,8 +7851,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.BreakStatement) then
-                    local toFreeVars = {}
-                    local statScope
+                    local toFreeVars, statScope = {}, nil
 
                     repeat
                         statScope = statScope and statScope.parentScope or statement.scope
@@ -8066,8 +7887,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return
                 end
                 if (statement.kind == AstKind.ContinueStatement) then
-                    local toFreeVars = {}
-                    local statScope
+                    local toFreeVars, statScope = {}, nil
 
                     repeat
                         statScope = statScope and statScope.parentScope or statement.scope
@@ -8118,14 +7938,11 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                     if statement.lhs.kind == AstKind.AssignmentIndexing then
                         local indexing = statement.lhs
-                        local baseReg = self.compileExpression(self, indexing.base, funcDepth, 1)[1]
-                        local indexReg = self.compileExpression(self, indexing.index, funcDepth, 1)[1]
-                        local valueReg = self.compileExpression(self, statement.rhs, funcDepth, 1)[1]
+                        local baseReg, indexReg, valueReg = self.compileExpression(self, indexing.base, funcDepth, 1)[1], self.compileExpression(self, indexing.index, funcDepth, 1)[1], self.compileExpression(self, statement.rhs, funcDepth, 1)[1]
 
                         self.addStatement(self, compoundConstructor(Ast.AssignmentIndexing(self.register(self, scope, baseReg), self.register(self, scope, indexReg)), self.register(self, scope, valueReg)), {}, {baseReg, indexReg, valueReg}, true)
                     else
-                        local valueReg = self.compileExpression(self, statement.rhs, funcDepth, 1)[1]
-                        local primaryExpr = statement.lhs
+                        local valueReg, primaryExpr = self.compileExpression(self, statement.rhs, funcDepth, 1)[1], statement.lhs
 
                         if primaryExpr.scope.isGlobal then
                             local tmpReg = self.allocRegister(self, false)
@@ -8164,7 +7981,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 logger.error(logger, string.format('%s is not a compileable statement!', statement.kind))
             end
-            Compiler.compileExpression = function(
+            function Compiler.compileExpression(
                 self,
                 expression,
                 funcDepth,
@@ -8260,8 +8077,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                             else
                                 if (self.scopeFunctionDepths[expression.scope] == funcDepth) then
                                     if self.isUpvalue(self, expression.scope, expression.id) then
-                                        local reg = self.allocRegister(self, false)
-                                        local varReg = self.getVarRegister(self, expression.scope, expression.id, funcDepth, nil)
+                                        local reg, varReg = self.allocRegister(self, false), self.getVarRegister(self, expression.scope, expression.id, funcDepth, nil)
 
                                         self.addStatement(self, self.setRegister(self, scope, reg, self.getUpvalueMember(self, scope, self.register(self, scope, varReg))), {reg}, {varReg}, true)
 
@@ -8270,8 +8086,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                                         regs[i] = self.getVarRegister(self, expression.scope, expression.id, funcDepth, nil)
                                     end
                                 else
-                                    local reg = self.allocRegister(self, false)
-                                    local upvalId = self.getUpvalueId(self, expression.scope, expression.id)
+                                    local reg, upvalId = self.allocRegister(self, false), self.getUpvalueId(self, expression.scope, expression.id)
 
                                     scope.addReferenceToHigherScope(scope, self.containerFuncScope, self.currentUpvaluesVar)
                                     self.addStatement(self, self.setRegister(self, scope, reg, self.getUpvalueMember(self, scope, Ast.IndexExpression(Ast.VariableExpression(self.containerFuncScope, self.currentUpvaluesVar), Ast.NumberExpression(upvalId)))), {reg}, {}, true)
@@ -8291,9 +8106,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return regs
                 end
                 if (expression.kind == AstKind.FunctionCallExpression) then
-                    local baseReg = self.compileExpression(self, expression.base, funcDepth, 1)[1]
-                    local retRegs = {}
-                    local returnAll = numReturns == self.RETURN_ALL
+                    local baseReg, retRegs, returnAll = self.compileExpression(self, expression.base, funcDepth, 1)[1], {}, numReturns == self.RETURN_ALL
 
                     if returnAll then
                         retRegs[1] = self.allocRegister(self, false)
@@ -8303,8 +8116,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         end
                     end
 
-                    local regs = {}
-                    local args = {}
+                    local regs, args = {}, {}
 
                     for i, expr in ipairs(expression.args)do
                         if i == #expression.args and (expr.kind == AstKind.FunctionCallExpression or expr.kind == AstKind.PassSelfFunctionCallExpression or expr.kind == AstKind.VarargExpression) then
@@ -8366,9 +8178,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     return retRegs
                 end
                 if (expression.kind == AstKind.PassSelfFunctionCallExpression) then
-                    local baseReg = self.compileExpression(self, expression.base, funcDepth, 1)[1]
-                    local retRegs = {}
-                    local returnAll = numReturns == self.RETURN_ALL
+                    local baseReg, retRegs, returnAll = self.compileExpression(self, expression.base, funcDepth, 1)[1], {}, numReturns == self.RETURN_ALL
 
                     if returnAll then
                         retRegs[1] = self.allocRegister(self, false)
@@ -8378,10 +8188,9 @@ Note that when chosing inline, the code size may increase significantly!]],
                         end
                     end
 
-                    local args = {
+                    local args, regs = {
                         self.register(self, scope, baseReg),
-                    }
-                    local regs = {baseReg}
+                    }, {baseReg}
 
                     for i, expr in ipairs(expression.args)do
                         if i == #expression.args and (expr.kind == AstKind.FunctionCallExpression or expr.kind == AstKind.PassSelfFunctionCallExpression or expr.kind == AstKind.VarargExpression) then
@@ -8454,8 +8263,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         regs[i] = self.allocRegister(self)
 
                         if (i == 1) then
-                            local baseReg = self.compileExpression(self, expression.base, funcDepth, 1)[1]
-                            local indexReg = self.compileExpression(self, expression.index, funcDepth, 1)[1]
+                            local baseReg, indexReg = self.compileExpression(self, expression.base, funcDepth, 1)[1], self.compileExpression(self, expression.index, funcDepth, 1)[1]
 
                             self.addStatement(self, self.setRegister(self, scope, regs[i], Ast.IndexExpression(self.register(self, scope, baseReg), self.register(self, scope, indexReg))), {
                                 regs[i],
@@ -8478,8 +8286,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         regs[i] = self.allocRegister(self)
 
                         if (i == 1) then
-                            local lhsReg = self.compileExpression(self, expression.lhs, funcDepth, 1)[1]
-                            local rhsReg = self.compileExpression(self, expression.rhs, funcDepth, 1)[1]
+                            local lhsReg, rhsReg = self.compileExpression(self, expression.lhs, funcDepth, 1)[1], self.compileExpression(self, expression.rhs, funcDepth, 1)[1]
 
                             self.addStatement(self, self.setRegister(self, scope, regs[i], Ast[expression.kind](self.register(self, scope, lhsReg), self.register(self, scope, rhsReg))), {
                                 regs[i],
@@ -8578,8 +8385,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         end
                     end
 
-                    local resReg = regs[1]
-                    local tmpReg
+                    local resReg, tmpReg = regs[1], nil
 
                     if posState then
                         tmpReg = self.allocRegister(self, false)
@@ -8619,8 +8425,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     do
                         self.setActiveBlock(self, block1)
 
-                        local scope = block1.scope
-                        local rhsReg = self.compileExpression(self, expression.rhs, funcDepth, 1)[1]
+                        local scope, rhsReg = block1.scope, self.compileExpression(self, expression.rhs, funcDepth, 1)[1]
 
                         self.addStatement(self, self.copyRegisters(self, scope, {resReg}, {rhsReg}), {resReg}, {rhsReg}, false)
                         self.freeRegister(self, rhsReg, false)
@@ -8663,8 +8468,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         end
                     end
 
-                    local resReg = regs[1]
-                    local tmpReg
+                    local resReg, tmpReg = regs[1], nil
 
                     if posState then
                         tmpReg = self.allocRegister(self, false)
@@ -8739,8 +8543,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         regs[i] = self.allocRegister(self)
 
                         if (i == 1) then
-                            local entries = {}
-                            local entryRegs = {}
+                            local entries, entryRegs = {}, {}
 
                             for i, entry in ipairs(expression.entries)do
                                 if (entry.kind == AstKind.TableEntry) then
@@ -8760,8 +8563,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                                         table.insert(entryRegs, reg)
                                     end
                                 else
-                                    local keyReg = self.compileExpression(self, entry.key, funcDepth, 1)[1]
-                                    local valReg = self.compileExpression(self, entry.value, funcDepth, 1)[1]
+                                    local keyReg, valReg = self.compileExpression(self, entry.key, funcDepth, 1)[1], self.compileExpression(self, entry.value, funcDepth, 1)[1]
 
                                     table.insert(entries, Ast.KeyedTableEntry(self.register(self, scope, keyReg), self.register(self, scope, valReg)))
                                     table.insert(entryRegs, valReg)
@@ -8830,7 +8632,7 @@ Note that when chosing inline, the code size may increase significantly!]],
             return Compiler
         end
 
-        __DARKLUA_BUNDLE_MODULES.w = function()
+        function __DARKLUA_BUNDLE_MODULES.w()
             local v = __DARKLUA_BUNDLE_MODULES.cache.w
 
             if not v then
@@ -8845,16 +8647,16 @@ Note that when chosing inline, the code size may increase significantly!]],
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Compiler = __DARKLUA_BUNDLE_MODULES.w()
+            local Step, Compiler = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.w()
             local Vmify = Step.extend(Step)
 
             Vmify.Description = 
 [[This Step will Compile your script into a fully-custom (not a half custom like other lua obfuscators) Bytecode Format and emit a vm for executing it.]]
             Vmify.Name = 'Vmify'
             Vmify.SettingsDescriptor = {}
-            Vmify.init = function(self, settings) end
-            Vmify.apply = function(self, ast)
+
+            function Vmify.init(self, settings) end
+            function Vmify.apply(self, ast)
                 local compiler = Compiler.new(Compiler)
 
                 return compiler.compile(compiler, ast)
@@ -8863,7 +8665,7 @@ Note that when chosing inline, the code size may increase significantly!]],
             return Vmify
         end
 
-        __DARKLUA_BUNDLE_MODULES.x = function()
+        function __DARKLUA_BUNDLE_MODULES.x()
             local v = __DARKLUA_BUNDLE_MODULES.cache.x
 
             if not v then
@@ -8878,16 +8680,8 @@ Note that when chosing inline, the code size may increase significantly!]],
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local visitast = __DARKLUA_BUNDLE_MODULES.t()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local Parser = __DARKLUA_BUNDLE_MODULES.j()
-            local enums = __DARKLUA_BUNDLE_MODULES.g()
-            local LuaVersion = enums.LuaVersion
-            local AstKind = Ast.AstKind
-            local ConstantArray = Step.extend(Step)
+            local Step, Ast, Scope, visitast, util, Parser, enums = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.t(), __DARKLUA_BUNDLE_MODULES.f(), __DARKLUA_BUNDLE_MODULES.j(), __DARKLUA_BUNDLE_MODULES.g()
+            local LuaVersion, AstKind, ConstantArray = enums.LuaVersion, Ast.AstKind, Step.extend(Step)
 
             ConstantArray.Description = 
 [[This Step will Extract all Constants and put them into an Array at the beginning of the script]]
@@ -8973,8 +8767,8 @@ Note that when chosing inline, the code size may increase significantly!]],
                 return generatorFunction(...)
             end
 
-            ConstantArray.init = function(self, settings) end
-            ConstantArray.createArray = function(self)
+            function ConstantArray.init(self, settings) end
+            function ConstantArray.createArray(self)
                 local entries = {}
 
                 for i, v in ipairs(self.constants)do
@@ -8987,11 +8781,10 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return Ast.TableConstructorExpression(entries)
             end
-            ConstantArray.indexing = function(self, index, data)
+            function ConstantArray.indexing(self, index, data)
                 if self.LocalWrapperCount > 0 and data.functionData.local_wrappers then
                     local wrappers = data.functionData.local_wrappers
-                    local wrapper = wrappers[math.random(#wrappers)]
-                    local args = {}
+                    local wrapper, args = wrappers[math.random(#wrappers)], {}
                     local ofs = index - self.wrapperOffset - wrapper.offset
 
                     for i = 1, self.LocalWrapperArgCount, 1 do
@@ -9013,7 +8806,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     })
                 end
             end
-            ConstantArray.getConstant = function(self, value, data)
+            function ConstantArray.getConstant(self, value, data)
                 if (self.lookup[value]) then
                     return self.indexing(self, self.lookup[value], data)
                 end
@@ -9025,7 +8818,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return self.indexing(self, idx, data)
             end
-            ConstantArray.addConstant = function(self, value)
+            function ConstantArray.addConstant(self, value)
                 if (self.lookup[value]) then
                     return
                 end
@@ -9053,7 +8846,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
             local rotateCode = '\tfor i, v in ipairs({{1, LEN}, {1, SHIFT}, {SHIFT + 1, LEN}}) do\n\t\twhile v[1] < v[2] do\n\t\t\tARR[v[1]], ARR[v[2]], v[1], v[2] = ARR[v[2]], ARR[v[1]], v[1] + 1, v[2] - 1\n\t\tend\n\tend\n'
 
-            ConstantArray.addRotateCode = function(self, ast, shift)
+            function ConstantArray.addRotateCode(self, ast, shift)
                 local parser = Parser.new(Parser, {
                     LuaVersion = LuaVersion.Lua51,
                 })
@@ -9074,9 +8867,9 @@ Note that when chosing inline, the code size may increase significantly!]],
                 end)
                 table.insert(ast.body.statements, 1, forStat)
             end
-            ConstantArray.addDecodeCode = function(self, ast)
+            function ConstantArray.addDecodeCode(self, ast)
                 if self.Encoding == 'base64' then
-                    local base64DecodeCode = '\tdo ' .. table.concat(util.shuffle{
+                    local base64DecodeCode, parser = '\tdo ' .. table.concat(util.shuffle{
                         'local lookup = LOOKUP_TABLE;',
                         'local len = string.len;',
                         'local sub = string.sub;',
@@ -9086,8 +8879,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                         'local concat = table.concat;',
                         'local type = type;',
                         'local arr = ARR;',
-                    }) .. '\t\tfor i = 1, #arr do\n\t\t\tlocal data = arr[i];\n\t\t\tif type(data) == "string" then\n\t\t\t\tlocal length = len(data)\n\t\t\t\tlocal parts = {}\n\t\t\t\tlocal index = 1\n\t\t\t\tlocal value = 0\n\t\t\t\tlocal count = 0\n\t\t\t\twhile index <= length do\n\t\t\t\t\tlocal char = sub(data, index, index)\n\t\t\t\t\tlocal code = lookup[char]\n\t\t\t\t\tif code then\n\t\t\t\t\t\tvalue = value + code * (64 ^ (3 - count))\n\t\t\t\t\t\tcount = count + 1\n\t\t\t\t\t\tif count == 4 then\n\t\t\t\t\t\t\tcount = 0\n\t\t\t\t\t\t\tlocal c1 = floor(value / 65536)\n\t\t\t\t\t\t\tlocal c2 = floor(value % 65536 / 256)\n\t\t\t\t\t\t\tlocal c3 = value % 256\n\t\t\t\t\t\t\tinsert(parts, strchar(c1, c2, c3))\n\t\t\t\t\t\t\tvalue = 0\n\t\t\t\t\t\tend\n\t\t\t\t\telseif char == "=" then\n\t\t\t\t\t\tinsert(parts, strchar(floor(value / 65536)));\n\t\t\t\t\t\tif index >= length or sub(data, index + 1, index + 1) ~= "=" then\n\t\t\t\t\t\t\tinsert(parts, strchar(floor(value % 65536 / 256)));\n\t\t\t\t\t\tend\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\t\tindex = index + 1\n\t\t\t\tend\n\t\t\t\tarr[i] = concat(parts)\n\t\t\tend\n\t\tend\n\tend\n'
-                    local parser = Parser.new(Parser, {
+                    }) .. '\t\tfor i = 1, #arr do\n\t\t\tlocal data = arr[i];\n\t\t\tif type(data) == "string" then\n\t\t\t\tlocal length = len(data)\n\t\t\t\tlocal parts = {}\n\t\t\t\tlocal index = 1\n\t\t\t\tlocal value = 0\n\t\t\t\tlocal count = 0\n\t\t\t\twhile index <= length do\n\t\t\t\t\tlocal char = sub(data, index, index)\n\t\t\t\t\tlocal code = lookup[char]\n\t\t\t\t\tif code then\n\t\t\t\t\t\tvalue = value + code * (64 ^ (3 - count))\n\t\t\t\t\t\tcount = count + 1\n\t\t\t\t\t\tif count == 4 then\n\t\t\t\t\t\t\tcount = 0\n\t\t\t\t\t\t\tlocal c1 = floor(value / 65536)\n\t\t\t\t\t\t\tlocal c2 = floor(value % 65536 / 256)\n\t\t\t\t\t\t\tlocal c3 = value % 256\n\t\t\t\t\t\t\tinsert(parts, strchar(c1, c2, c3))\n\t\t\t\t\t\t\tvalue = 0\n\t\t\t\t\t\tend\n\t\t\t\t\telseif char == "=" then\n\t\t\t\t\t\tinsert(parts, strchar(floor(value / 65536)));\n\t\t\t\t\t\tif index >= length or sub(data, index + 1, index + 1) ~= "=" then\n\t\t\t\t\t\t\tinsert(parts, strchar(floor(value % 65536 / 256)));\n\t\t\t\t\t\tend\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\t\tindex = index + 1\n\t\t\t\tend\n\t\t\t\tarr[i] = concat(parts)\n\t\t\tend\n\t\tend\n\tend\n', Parser.new(Parser, {
                         LuaVersion = LuaVersion.Lua51,
                     })
                     local newAst = parser.parse(parser, base64DecodeCode)
@@ -9113,9 +8905,8 @@ Note that when chosing inline, the code size may increase significantly!]],
                     table.insert(ast.body.statements, 1, forStat)
                 end
             end
-            ConstantArray.createBase64Lookup = function(self)
-                local entries = {}
-                local i = 0
+            function ConstantArray.createBase64Lookup(self)
+                local entries, i = {}, 0
 
                 for char in string.gmatch(self.base64chars, '.')do
                     table.insert(entries, Ast.KeyedTableEntry(Ast.StringExpression(char), Ast.NumberExpression(i)))
@@ -9127,7 +8918,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                 return Ast.TableConstructorExpression(entries)
             end
-            ConstantArray.encode = function(self, str)
+            function ConstantArray.encode(self, str)
                 if self.Encoding == 'base64' then
                     return ((str.gsub(str, '.', function(x)
                         local r, b = '', x.byte(x)
@@ -9156,7 +8947,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                     })[#str % 3 + 1])
                 end
             end
-            ConstantArray.apply = function(self, ast, pipeline)
+            function ConstantArray.apply(self, ast, pipeline)
                 self.rootScope = ast.body.scope
                 self.arrId = self.rootScope:addVariable()
                 self.base64chars = table.concat(util.shuffle{
@@ -9276,8 +9067,7 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                             nameLookup[name] = true
 
-                            local offset = math.random(-self.MaxWrapperOffset, self.MaxWrapperOffset)
-                            local argPos = math.random(1, self.LocalWrapperArgCount)
+                            local offset, argPos = math.random(-self.MaxWrapperOffset, self.MaxWrapperOffset), math.random(1, self.LocalWrapperArgCount)
 
                             data.functionData.local_wrappers[i] = {
                                 arg = argPos,
@@ -9305,17 +9095,11 @@ Note that when chosing inline, the code size may increase significantly!]],
                     if self.LocalWrapperCount > 0 and node.kind == AstKind.Block and node.isFunctionBlock and data.functionData.local_wrappers and data.functionData.__used then
                         data.functionData.__used = nil
 
-                        local elems = {}
-                        local wrappers = data.functionData.local_wrappers
+                        local elems, wrappers = {}, data.functionData.local_wrappers
 
                         for i = 1, self.LocalWrapperCount, 1 do
                             local wrapper = wrappers[i]
-                            local argPos = wrapper.arg
-                            local offset = wrapper.offset
-                            local name = wrapper.index
-                            local funcScope = Scope.new(Scope, node.scope)
-                            local arg
-                            local args = {}
+                            local argPos, offset, name, funcScope, arg, args = wrapper.arg, wrapper.offset, wrapper.index, Scope.new(Scope, node.scope), nil, {}
 
                             for i = 1, self.LocalWrapperArgCount, 1 do
                                 args[i] = funcScope.addVariable(funcScope)
@@ -9336,15 +9120,14 @@ Note that when chosing inline, the code size may increase significantly!]],
 
                             funcScope.addReferenceToHigherScope(funcScope, self.rootScope, self.wrapperId)
 
-                            local callArg = Ast.FunctionCallExpression(Ast.VariableExpression(self.rootScope, self.wrapperId), {addSubArg})
-                            local fargs = {}
+                            local callArg, fargs = Ast.FunctionCallExpression(Ast.VariableExpression(self.rootScope, self.wrapperId), {addSubArg}), {}
 
                             for i, v in ipairs(args)do
                                 fargs[i] = Ast.VariableExpression(funcScope, v)
                             end
 
                             elems[i] = Ast.KeyedTableEntry(Ast.StringExpression(name), Ast.FunctionLiteralExpression(fargs, Ast.Block({
-                                Ast.ReturnStatement({callArg}),
+                                Ast.ReturnStatement{callArg},
                             }, funcScope)))
                         end
 
@@ -9357,14 +9140,13 @@ Note that when chosing inline, the code size may increase significantly!]],
                 end)
                 self.addDecodeCode(self, ast)
 
-                local steps = util.shuffle({
+                local steps = util.shuffle{
                     function()
                         local funcScope = Scope.new(Scope, self.rootScope)
 
                         funcScope.addReferenceToHigherScope(funcScope, self.rootScope, self.arrId)
 
-                        local arg = funcScope.addVariable(funcScope)
-                        local addSubArg
+                        local arg, addSubArg = funcScope.addVariable(funcScope), nil
 
                         if self.wrapperOffset < 0 then
                             addSubArg = Ast.SubExpression(Ast.VariableExpression(funcScope, arg), Ast.NumberExpression(
@@ -9376,9 +9158,9 @@ Note that when chosing inline, the code size may increase significantly!]],
                         table.insert(ast.body.statements, 1, Ast.LocalFunctionDeclaration(self.rootScope, self.wrapperId, {
                             Ast.VariableExpression(funcScope, arg),
                         }, Ast.Block({
-                            Ast.ReturnStatement({
+                            Ast.ReturnStatement{
                                 Ast.IndexExpression(Ast.VariableExpression(self.rootScope, self.arrId), addSubArg),
-                            }),
+                            },
                         }, funcScope)))
                     end,
                     function()
@@ -9389,7 +9171,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                             self.addRotateCode(self, ast, shift)
                         end
                     end,
-                })
+                }
 
                 for i, f in ipairs(steps)do
                     f()
@@ -9410,7 +9192,7 @@ Note that when chosing inline, the code size may increase significantly!]],
             return ConstantArray
         end
 
-        __DARKLUA_BUNDLE_MODULES.y = function()
+        function __DARKLUA_BUNDLE_MODULES.y()
             local v = __DARKLUA_BUNDLE_MODULES.cache.y
 
             if not v then
@@ -9425,9 +9207,7 @@ Note that when chosing inline, the code size may increase significantly!]],
     end
     do
         local function __modImpl()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local RandomStrings = __DARKLUA_BUNDLE_MODULES.v()
-            local RandomLiterals = {}
+            local Ast, RandomStrings, RandomLiterals = __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.v(), {}
 
             local function callNameGenerator(generatorFunction, ...)
                 if (type(generatorFunction) == 'table') then
@@ -9437,16 +9217,16 @@ Note that when chosing inline, the code size may increase significantly!]],
                 return generatorFunction(...)
             end
 
-            RandomLiterals.String = function(pipeline)
+            function RandomLiterals.String(pipeline)
                 return Ast.StringExpression(callNameGenerator(pipeline.namegenerator, math.random(1, 4096)))
             end
-            RandomLiterals.Dictionary = function()
+            function RandomLiterals.Dictionary()
                 return RandomStrings.randomStringNode(true)
             end
-            RandomLiterals.Number = function()
+            function RandomLiterals.Number()
                 return Ast.NumberExpression(math.random(-8388608, 8388607))
             end
-            RandomLiterals.Any = function(pipeline)
+            function RandomLiterals.Any(pipeline)
                 local type = math.random(1, 3)
 
                 if type == 1 then
@@ -9461,7 +9241,7 @@ Note that when chosing inline, the code size may increase significantly!]],
             return RandomLiterals
         end
 
-        __DARKLUA_BUNDLE_MODULES.z = function()
+        function __DARKLUA_BUNDLE_MODULES.z()
             local v = __DARKLUA_BUNDLE_MODULES.cache.z
 
             if not v then
@@ -9476,13 +9256,8 @@ Note that when chosing inline, the code size may increase significantly!]],
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local visitast = __DARKLUA_BUNDLE_MODULES.t()
-            local RandomLiterals = __DARKLUA_BUNDLE_MODULES.z()
-            local AstKind = Ast.AstKind
-            local ProifyLocals = Step.extend(Step)
+            local Step, Ast, Scope, visitast, RandomLiterals = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.t(), __DARKLUA_BUNDLE_MODULES.z()
+            local AstKind, ProifyLocals = Ast.AstKind, Step.extend(Step)
 
             ProifyLocals.Description = 'This Step wraps all locals into Proxy Objects'
             ProifyLocals.Name = 'Proxify Locals'
@@ -9502,8 +9277,7 @@ Note that when chosing inline, the code size may increase significantly!]],
             }
 
             local function shallowcopy(orig)
-                local orig_type = type(orig)
-                local copy
+                local orig_type, copy = type(orig), nil
 
                 if orig_type == 'table' then
                     copy = {}
@@ -9556,17 +9330,16 @@ Note that when chosing inline, the code size may increase significantly!]],
                 },
             }
 
-            ProifyLocals.init = function(self, settings) end
+            function ProifyLocals.init(self, settings) end
 
             local function generateLocalMetatableInfo(pipeline)
-                local usedOps = {}
-                local info = {}
+                local usedOps, info = {}, {}
 
-                for i, v in ipairs({
+                for i, v in ipairs{
                     'setValue',
                     'getValue',
                     'index',
-                })do
+                }do
                     local rop
 
                     repeat
@@ -9582,16 +9355,14 @@ Note that when chosing inline, the code size may increase significantly!]],
                 return info
             end
 
-            ProifyLocals.CreateAssignmentExpression = function(
+            function ProifyLocals.CreateAssignmentExpression(
                 self,
                 info,
                 expr,
                 parentScope
             )
-                local metatableVals = {}
-                local setValueFunctionScope = Scope.new(Scope, parentScope)
-                local setValueSelf = setValueFunctionScope.addVariable(setValueFunctionScope)
-                local setValueArg = setValueFunctionScope.addVariable(setValueFunctionScope)
+                local metatableVals, setValueFunctionScope = {}, Scope.new(Scope, parentScope)
+                local setValueSelf, setValueArg = setValueFunctionScope.addVariable(setValueFunctionScope), setValueFunctionScope.addVariable(setValueFunctionScope)
                 local setvalueFunctionLiteral = Ast.FunctionLiteralExpression({
                     Ast.VariableExpression(setValueFunctionScope, setValueSelf),
                     Ast.VariableExpression(setValueFunctionScope, setValueArg),
@@ -9606,9 +9377,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                 table.insert(metatableVals, Ast.KeyedTableEntry(Ast.StringExpression(info.setValue.key), setvalueFunctionLiteral))
 
                 local getValueFunctionScope = Scope.new(Scope, parentScope)
-                local getValueSelf = getValueFunctionScope.addVariable(getValueFunctionScope)
-                local getValueArg = getValueFunctionScope.addVariable(getValueFunctionScope)
-                local getValueIdxExpr
+                local getValueSelf, getValueArg, getValueIdxExpr = getValueFunctionScope.addVariable(getValueFunctionScope), getValueFunctionScope.addVariable(getValueFunctionScope), nil
 
                 if (info.getValue.key == '__index' or info.setValue.key == '__index') then
                     getValueIdxExpr = Ast.FunctionCallExpression(Ast.VariableExpression(getValueFunctionScope.resolveGlobal(getValueFunctionScope, 'rawget')), {
@@ -9623,20 +9392,20 @@ Note that when chosing inline, the code size may increase significantly!]],
                     Ast.VariableExpression(getValueFunctionScope, getValueSelf),
                     Ast.VariableExpression(getValueFunctionScope, getValueArg),
                 }, Ast.Block({
-                    Ast.ReturnStatement({getValueIdxExpr}),
+                    Ast.ReturnStatement{getValueIdxExpr},
                 }, getValueFunctionScope))
 
                 table.insert(metatableVals, Ast.KeyedTableEntry(Ast.StringExpression(info.getValue.key), getvalueFunctionLiteral))
                 parentScope.addReferenceToHigherScope(parentScope, self.setMetatableVarScope, self.setMetatableVarId)
 
                 return Ast.FunctionCallExpression(Ast.VariableExpression(self.setMetatableVarScope, self.setMetatableVarId), {
-                    Ast.TableConstructorExpression({
+                    Ast.TableConstructorExpression{
                         Ast.KeyedTableEntry(Ast.StringExpression(info.valueName), expr),
-                    }),
+                    },
                     Ast.TableConstructorExpression(metatableVals),
                 })
             end
-            ProifyLocals.apply = function(self, ast, pipeline)
+            function ProifyLocals.apply(self, ast, pipeline)
                 local localMetatableInfos = {}
 
                 local function getLocalMetatableInfo(scope, id)
@@ -9702,8 +9471,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                             local localMetatableInfo = getLocalMetatableInfo(variable.scope, variable.id)
 
                             if localMetatableInfo then
-                                local args = shallowcopy(node.rhs)
-                                local vexp = Ast.VariableExpression(variable.scope, variable.id)
+                                local args, vexp = shallowcopy(node.rhs), Ast.VariableExpression(variable.scope, variable.id)
 
                                 vexp.__ignoreProxifyLocals = true
                                 args[1] = localMetatableInfo.setValue.constructor(vexp, args[1])
@@ -9718,8 +9486,7 @@ Note that when chosing inline, the code size may increase significantly!]],
                 end, function(node, data)
                     if (node.kind == AstKind.LocalVariableDeclaration) then
                         for i, id in ipairs(node.ids)do
-                            local expr = node.expressions[i] or Ast.NilExpression()
-                            local localMetatableInfo = getLocalMetatableInfo(node.scope, id)
+                            local expr, localMetatableInfo = node.expressions[i] or Ast.NilExpression(), getLocalMetatableInfo(node.scope, id)
 
                             if localMetatableInfo then
                                 local newExpr = self.CreateAssignmentExpression(self, localMetatableInfo, expr, node.scope)
@@ -9777,14 +9544,14 @@ Note that when chosing inline, the code size may increase significantly!]],
                 table.insert(ast.body.statements, 1, Ast.LocalVariableDeclaration(self.setMetatableVarScope, {
                     self.setMetatableVarId,
                 }, {
-                    Ast.VariableExpression(self.setMetatableVarScope:resolveGlobal('setmetatable')),
+                    Ast.VariableExpression(self.setMetatableVarScope:resolveGlobal'setmetatable'),
                 }))
             end
 
             return ProifyLocals
         end
 
-        __DARKLUA_BUNDLE_MODULES.A = function()
+        function __DARKLUA_BUNDLE_MODULES.A()
             local v = __DARKLUA_BUNDLE_MODULES.cache.A
 
             if not v then
@@ -9799,13 +9566,7 @@ Note that when chosing inline, the code size may increase significantly!]],
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local RandomStrings = __DARKLUA_BUNDLE_MODULES.v()
-            local Parser = __DARKLUA_BUNDLE_MODULES.j()
-            local Enums = __DARKLUA_BUNDLE_MODULES.g()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
+            local Step, Ast, Scope, RandomStrings, Parser, Enums, logger = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.v(), __DARKLUA_BUNDLE_MODULES.j(), __DARKLUA_BUNDLE_MODULES.g(), __DARKLUA_BUNDLE_MODULES.d()
             local AntiTamper = Step.extend(Step)
 
             AntiTamper.Description = 
@@ -9819,8 +9580,9 @@ Note that when chosing inline, the code size may increase significantly!]],
 [[Use debug library. (Recommended, however scripts will not work without debug library.)]],
                 },
             }
-            AntiTamper.init = function(self, settings) end
-            AntiTamper.apply = function(self, ast, pipeline)
+
+            function AntiTamper.init(self, settings) end
+            function AntiTamper.apply(self, ast, pipeline)
                 if pipeline.PrettyPrint then
                     logger.warn(logger, string.format('"%s" cannot be used with PrettyPrint, ignoring "%s"', self.Name, self.Name))
 
@@ -9946,7 +9708,7 @@ end
             return AntiTamper
         end
 
-        __DARKLUA_BUNDLE_MODULES.B = function()
+        function __DARKLUA_BUNDLE_MODULES.B()
             local v = __DARKLUA_BUNDLE_MODULES.cache.B
 
             if not v then
@@ -9961,29 +9723,16 @@ end
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local RandomStrings = __DARKLUA_BUNDLE_MODULES.v()
-            local Parser = __DARKLUA_BUNDLE_MODULES.j()
-            local Enums = __DARKLUA_BUNDLE_MODULES.g()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local visitast = __DARKLUA_BUNDLE_MODULES.t()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local AstKind = Ast.AstKind
-            local EncryptStrings = Step.extend(Step)
+            local Step, Ast, Scope, RandomStrings, Parser, Enums, logger, visitast, util = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.v(), __DARKLUA_BUNDLE_MODULES.j(), __DARKLUA_BUNDLE_MODULES.g(), __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.t(), __DARKLUA_BUNDLE_MODULES.f()
+            local AstKind, EncryptStrings = Ast.AstKind, Step.extend(Step)
 
             EncryptStrings.Description = 'This Step will encrypt strings within your Program.'
             EncryptStrings.Name = 'Encrypt Strings'
             EncryptStrings.SettingsDescriptor = {}
-            EncryptStrings.init = function(self, settings) end
-            EncryptStrings.CreateEncrypionService = function(self)
-                local usedSeeds = {}
-                local secret_key_6 = math.random(0, 63)
-                local secret_key_7 = math.random(0, 127)
-                local secret_key_44 = math.random(0, 17592186044415)
-                local secret_key_8 = math.random(0, 255)
-                local floor = math.floor
+
+            function EncryptStrings.init(self, settings) end
+            function EncryptStrings.CreateEncrypionService(self)
+                local usedSeeds, secret_key_6, secret_key_7, secret_key_44, secret_key_8, floor = {}, math.random(0, 63), math.random(0, 127), math.random(0, 17592186044415), math.random(0, 255), math.floor
 
                 local function primitive_root_257(idx)
                     local g, m, d = 1, 128, 2 * idx + 1
@@ -9995,12 +9744,7 @@ end
                     return g
                 end
 
-                local param_mul_8 = primitive_root_257(secret_key_7)
-                local param_mul_45 = secret_key_6 * 4 + 1
-                local param_add_45 = secret_key_44 * 2 + 1
-                local state_45 = 0
-                local state_8 = 2
-                local prev_values = {}
+                local param_mul_8, param_mul_45, param_add_45, state_45, state_8, prev_values = primitive_root_257(secret_key_7), secret_key_6 * 4 + 1, secret_key_44 * 2 + 1, 0, 2, {}
 
                 local function set_seed(seed_53)
                     state_45 = seed_53 % 35184372088832
@@ -10034,10 +9778,8 @@ end
                     if #prev_values == 0 then
                         local rnd = get_random_32()
                         local low_16 = rnd % 65536
-                        local high_16 = (rnd - low_16) / 65536
-                        local b1 = low_16 % 256
-                        local b2 = (low_16 - b1) / 256
-                        local b3 = high_16 % 256
+                        local high_16, b1 = (rnd - low_16) / 65536, low_16 % 256
+                        local b2, b3 = (low_16 - b1) / 256, high_16 % 256
                         local b4 = (high_16 - b3) / 256
 
                         prev_values = {
@@ -10055,9 +9797,7 @@ end
 
                     set_seed(seed)
 
-                    local len = string.len(str)
-                    local out = {}
-                    local prevVal = secret_key_8
+                    local len, out, prevVal = string.len(str), {}, secret_key_8
 
                     for i = 1, len do
                         local byte = string.byte(str, i)
@@ -10083,16 +9823,14 @@ end
                     genCode = genCode,
                 }
             end
-            EncryptStrings.apply = function(self, ast, pipeline)
+            function EncryptStrings.apply(self, ast, pipeline)
                 local Encryptor = self.CreateEncrypionService(self)
                 local code = Encryptor.genCode()
                 local newAst = Parser.new(Parser, {
                     LuaVersion = Enums.LuaVersion.Lua51,
                 }):parse(code)
-                local doStat = newAst.body.statements[1]
-                local scope = ast.body.scope
-                local decryptVar = scope.addVariable(scope)
-                local stringsVar = scope.addVariable(scope)
+                local doStat, scope = newAst.body.statements[1], ast.body.scope
+                local decryptVar, stringsVar = scope.addVariable(scope), scope.addVariable(scope)
 
                 doStat.body.scope:setParent(ast.body.scope)
                 visitast(newAst, nil, function(node, data)
@@ -10137,7 +9875,7 @@ end
             return EncryptStrings
         end
 
-        __DARKLUA_BUNDLE_MODULES.C = function()
+        function __DARKLUA_BUNDLE_MODULES.C()
             local v = __DARKLUA_BUNDLE_MODULES.cache.C
 
             if not v then
@@ -10154,13 +9892,8 @@ end
         local function __modImpl()
             unpack = unpack or table.unpack
 
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local visitast = __DARKLUA_BUNDLE_MODULES.t()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local AstKind = Ast.AstKind
-            local NumbersToExpressions = Step.extend(Step)
+            local Step, Ast, Scope, visitast, util = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.t(), __DARKLUA_BUNDLE_MODULES.f()
+            local AstKind, NumbersToExpressions = Ast.AstKind, Step.extend(Step)
 
             NumbersToExpressions.Description = 'This Step Converts number Literals to Expressions'
             NumbersToExpressions.Name = 'Numbers To Expressions'
@@ -10178,7 +9911,8 @@ end
                     max = 0.8,
                 },
             }
-            NumbersToExpressions.init = function(self, settings)
+
+            function NumbersToExpressions.init(self, settings)
                 self.ExpressionGenerators = {
                     function(val, depth)
                         local val2 = math.random(-1048576, 1048576)
@@ -10202,7 +9936,7 @@ end
                     end,
                 }
             end
-            NumbersToExpressions.CreateNumberExpression = function(
+            function NumbersToExpressions.CreateNumberExpression(
                 self,
                 val,
                 depth
@@ -10211,9 +9945,9 @@ end
                     return Ast.NumberExpression(val)
                 end
 
-                local generators = util.shuffle({
+                local generators = util.shuffle{
                     unpack(self.ExpressionGenerators),
-                })
+                }
 
                 for i, generator in ipairs(generators)do
                     local node = generator(val, depth + 1)
@@ -10225,7 +9959,7 @@ end
 
                 return Ast.NumberExpression(val)
             end
-            NumbersToExpressions.apply = function(self, ast)
+            function NumbersToExpressions.apply(self, ast)
                 visitast(ast, nil, function(node, data)
                     if node.kind == AstKind.NumberExpression then
                         if math.random() <= self.Treshold then
@@ -10238,7 +9972,7 @@ end
             return NumbersToExpressions
         end
 
-        __DARKLUA_BUNDLE_MODULES.D = function()
+        function __DARKLUA_BUNDLE_MODULES.D()
             local v = __DARKLUA_BUNDLE_MODULES.cache.D
 
             if not v then
@@ -10253,17 +9987,15 @@ end
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local visitast = __DARKLUA_BUNDLE_MODULES.t()
-            local AstKind = Ast.AstKind
-            local AddVararg = Step.extend(Step)
+            local Step, Ast, visitast = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.t()
+            local AstKind, AddVararg = Ast.AstKind, Step.extend(Step)
 
             AddVararg.Description = 'This Step Adds Vararg to all Functions'
             AddVararg.Name = 'Add Vararg'
             AddVararg.SettingsDescriptor = {}
-            AddVararg.init = function(self, settings) end
-            AddVararg.apply = function(self, ast)
+
+            function AddVararg.init(self, settings) end
+            function AddVararg.apply(self, ast)
                 visitast(ast, nil, function(node)
                     if node.kind == AstKind.FunctionDeclaration or node.kind == AstKind.LocalFunctionDeclaration or node.kind == AstKind.FunctionLiteralExpression then
                         if #node.args < 1 or node.args[#node.args].kind ~= AstKind.VarargExpression then
@@ -10276,7 +10008,7 @@ end
             return AddVararg
         end
 
-        __DARKLUA_BUNDLE_MODULES.E = function()
+        function __DARKLUA_BUNDLE_MODULES.E()
             local v = __DARKLUA_BUNDLE_MODULES.cache.E
 
             if not v then
@@ -10291,9 +10023,7 @@ end
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
+            local Step, Ast, Scope = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i()
             local Watermark = Step.extend(Step)
 
             Watermark.Description = 'This Step will add a watermark to the script'
@@ -10313,20 +10043,20 @@ end
                     default = '_WATERMARK',
                 },
             }
-            Watermark.init = function(self, settings) end
-            Watermark.apply = function(self, ast)
+
+            function Watermark.init(self, settings) end
+            function Watermark.apply(self, ast)
                 local body = ast.body
 
                 if string.len(self.Content) > 0 then
                     local scope, variable = ast.globalScope:resolve(self.CustomVariable)
-                    local watermark = Ast.AssignmentVariable(ast.globalScope, variable)
-                    local functionScope = Scope.new(Scope, body.scope)
+                    local watermark, functionScope = Ast.AssignmentVariable(ast.globalScope, variable), Scope.new(Scope, body.scope)
 
                     functionScope.addReferenceToHigherScope(functionScope, ast.globalScope, variable)
 
                     local arg = functionScope.addVariable(functionScope)
                     local statement = Ast.PassSelfFunctionCallStatement(Ast.StringExpression(self.Content), 'gsub', {
-                        Ast.StringExpression('.+'),
+                        Ast.StringExpression'.+',
                         Ast.FunctionLiteralExpression({
                             Ast.VariableExpression(functionScope, arg),
                         }, Ast.Block({
@@ -10343,7 +10073,7 @@ end
             return Watermark
         end
 
-        __DARKLUA_BUNDLE_MODULES.F = function()
+        function __DARKLUA_BUNDLE_MODULES.F()
             local v = __DARKLUA_BUNDLE_MODULES.cache.F
 
             if not v then
@@ -10358,10 +10088,7 @@ end
     end
     do
         local function __modImpl()
-            local Step = __DARKLUA_BUNDLE_MODULES.r()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Scope = __DARKLUA_BUNDLE_MODULES.i()
-            local Watermark = __DARKLUA_BUNDLE_MODULES.F()
+            local Step, Ast, Scope, Watermark = __DARKLUA_BUNDLE_MODULES.r(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.i(), __DARKLUA_BUNDLE_MODULES.F()
             local WatermarkCheck = Step.extend(Step)
 
             WatermarkCheck.Description = 'This Step will add a watermark to the script'
@@ -10384,19 +10111,16 @@ end
                 return generatorFunction(...)
             end
 
-            WatermarkCheck.init = function(self, settings) end
-            WatermarkCheck.apply = function(self, ast, pipeline)
+            function WatermarkCheck.init(self, settings) end
+            function WatermarkCheck.apply(self, ast, pipeline)
                 self.CustomVariable = '_' .. callNameGenerator(pipeline.namegenerator, math.random(10000000000, 100000000000))
 
                 pipeline.addStep(pipeline, Watermark.new(Watermark, self))
 
-                local body = ast.body
-                local watermarkExpression = Ast.StringExpression(self.Content)
-                local scope, variable = ast.globalScope:resolve(self.CustomVariable)
+                local body, watermarkExpression, scope, variable = ast.body, Ast.StringExpression(self.Content), ast.globalScope:resolve(self.CustomVariable)
                 local watermark = Ast.VariableExpression(ast.globalScope, variable)
-                local notEqualsExpression = Ast.NotEqualsExpression(watermark, watermarkExpression)
-                local ifBody = Ast.Block({
-                    Ast.ReturnStatement({}),
+                local notEqualsExpression, ifBody = Ast.NotEqualsExpression(watermark, watermarkExpression), Ast.Block({
+                    Ast.ReturnStatement{},
                 }, Scope.new(Scope, ast.body.scope))
 
                 table.insert(body.statements, 1, Ast.IfStatement(notEqualsExpression, ifBody, {}, nil))
@@ -10405,7 +10129,7 @@ end
             return WatermarkCheck
         end
 
-        __DARKLUA_BUNDLE_MODULES.G = function()
+        function __DARKLUA_BUNDLE_MODULES.G()
             local v = __DARKLUA_BUNDLE_MODULES.cache.G
 
             if not v then
@@ -10434,7 +10158,7 @@ end
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.H = function()
+        function __DARKLUA_BUNDLE_MODULES.H()
             local v = __DARKLUA_BUNDLE_MODULES.cache.H
 
             if not v then
@@ -10449,19 +10173,8 @@ end
     end
     do
         local function __modImpl()
-            local config = __DARKLUA_BUNDLE_MODULES.a()
-            local Ast = __DARKLUA_BUNDLE_MODULES.b()
-            local Enums = __DARKLUA_BUNDLE_MODULES.g()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
-            local Parser = __DARKLUA_BUNDLE_MODULES.j()
-            local Unparser = __DARKLUA_BUNDLE_MODULES.k()
-            local logger = __DARKLUA_BUNDLE_MODULES.d()
-            local NameGenerators = __DARKLUA_BUNDLE_MODULES.q()
-            local Steps = __DARKLUA_BUNDLE_MODULES.H()
-            local lookupify = util.lookupify
-            local LuaVersion = Enums.LuaVersion
-            local AstKind = Ast.AstKind
-            local isWindows = package and package.config and type(package.config) == 'string' and package.config:sub(1, 1) == '\\'
+            local config, Ast, Enums, util, Parser, Unparser, logger, NameGenerators, Steps = __DARKLUA_BUNDLE_MODULES.a(), __DARKLUA_BUNDLE_MODULES.b(), __DARKLUA_BUNDLE_MODULES.g(), __DARKLUA_BUNDLE_MODULES.f(), __DARKLUA_BUNDLE_MODULES.j(), __DARKLUA_BUNDLE_MODULES.k(), __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.q(), __DARKLUA_BUNDLE_MODULES.H()
+            local lookupify, LuaVersion, AstKind, isWindows = util.lookupify, Enums.LuaVersion, Ast.AstKind, package and package.config and type(package.config) == 'string' and package.config:sub(1, 1) == '\\'
 
             local function gettime()
                 if isWindows then
@@ -10482,7 +10195,7 @@ end
                 },
             }
 
-            Pipeline.new = function(self, settings)
+            function Pipeline.new(self, settings)
                 local luaVersion = settings.luaVersion or settings.LuaVersion or Pipeline.DefaultSettings.LuaVersion
                 local conventions = Enums.Conventions[luaVersion]
 
@@ -10491,9 +10204,7 @@ end
 [[" is not recognised by the Tokenizer! Please use one of the following: "]] .. table.concat(util.keys(Enums.Conventions), '","') .. '"')
                 end
 
-                local prettyPrint = settings.PrettyPrint or Pipeline.DefaultSettings.PrettyPrint
-                local prefix = settings.VarNamePrefix or Pipeline.DefaultSettings.VarNamePrefix
-                local seed = settings.Seed or 0
+                local prettyPrint, prefix, seed = settings.PrettyPrint or Pipeline.DefaultSettings.PrettyPrint, settings.VarNamePrefix or Pipeline.DefaultSettings.VarNamePrefix, settings.Seed or 0
                 local pipeline = {
                     LuaVersion = luaVersion,
                     PrettyPrint = prettyPrint,
@@ -10516,7 +10227,7 @@ end
 
                 return pipeline
             end
-            Pipeline.fromConfig = function(self, config)
+            function Pipeline.fromConfig(self, config)
                 config = config or {}
 
                 local pipeline = Pipeline.new(Pipeline, {
@@ -10526,7 +10237,7 @@ end
                     Seed = config.Seed or 0,
                 })
 
-                pipeline.setNameGenerator(pipeline, config.NameGenerator or 'MangledShuffled')
+                pipeline.setNameGenerator(pipeline, config.namegenerator or 'Il')
 
                 local steps = config.Steps or {}
 
@@ -10546,24 +10257,24 @@ end
 
                 return pipeline
             end
-            Pipeline.addStep = function(self, step)
+            function Pipeline.addStep(self, step)
                 table.insert(self.steps, step)
             end
-            Pipeline.resetSteps = function(self, step)
+            function Pipeline.resetSteps(self, step)
                 self.steps = {}
             end
-            Pipeline.getSteps = function(self)
+            function Pipeline.getSteps(self)
                 return self.steps
             end
-            Pipeline.setOption = function(self, name, value)
+            function Pipeline.setOption(self, name, value)
                 assert(false, 'TODO')
 
                 if (Pipeline.DefaultSettings[name] ~= nil) then
                 else
-                    logger.error(logger, string.format('"%s" is not a valid setting'))
+                    logger.error(logger, string.format'"%s" is not a valid setting')
                 end
             end
-            Pipeline.setLuaVersion = function(self, luaVersion)
+            function Pipeline.setLuaVersion(self, luaVersion)
                 local conventions = Enums.Conventions[luaVersion]
 
                 if (not conventions) then
@@ -10575,10 +10286,10 @@ end
                 self.unparser = Unparser.new(Unparser, {luaVersion = luaVersion})
                 self.conventions = conventions
             end
-            Pipeline.getLuaVersion = function(self)
+            function Pipeline.getLuaVersion(self)
                 return self.luaVersion
             end
-            Pipeline.setNameGenerator = function(self, nameGenerator)
+            function Pipeline.setNameGenerator(self, nameGenerator)
                 if (type(nameGenerator) == 'string') then
                     nameGenerator = Pipeline.NameGenerators[nameGenerator]
                 end
@@ -10591,7 +10302,7 @@ end
 [[The Argument to Pipeline:setNameGenerator must be a valid NameGenerator function or function name e.g: "mangled"]])
                 end
             end
-            Pipeline.apply = function(self, code, filename)
+            function Pipeline.apply(self, code, filename)
                 local startTime = gettime()
 
                 filename = filename or 'Anonymus Script'
@@ -10606,9 +10317,7 @@ end
 
                 logger.info(logger, 'Parsing ...')
 
-                local parserStartTime = gettime()
-                local sourceLen = string.len(code)
-                local ast = self.parser:parse(code)
+                local parserStartTime, sourceLen, ast = gettime(), string.len(code), self.parser:parse(code)
                 local parserTimeDiff = gettime() - parserStartTime
 
                 logger.info(logger, string.format('Parsing Done in %.2f seconds', parserTimeDiff))
@@ -10638,19 +10347,18 @@ end
 
                 return code
             end
-            Pipeline.unparse = function(self, ast)
+            function Pipeline.unparse(self, ast)
                 local startTime = gettime()
 
                 logger.info(logger, 'Generating Code ...')
 
-                local unparsed = self.unparser:unparse(ast)
-                local timeDiff = gettime() - startTime
+                local unparsed, timeDiff = self.unparser:unparse(ast), gettime() - startTime
 
                 logger.info(logger, string.format('Code Generation Done in %.2f seconds', timeDiff))
 
                 return unparsed
             end
-            Pipeline.renameVariables = function(self, ast)
+            function Pipeline.renameVariables(self, ast)
                 local startTime = gettime()
 
                 logger.info(logger, 'Renaming Variables ...')
@@ -10684,7 +10392,7 @@ end
             return Pipeline
         end
 
-        __DARKLUA_BUNDLE_MODULES.I = function()
+        function __DARKLUA_BUNDLE_MODULES.I()
             local v = __DARKLUA_BUNDLE_MODULES.cache.I
 
             if not v then
@@ -10699,19 +10407,15 @@ end
     end
     do
         local function __modImpl()
-            local Tokenizer = __DARKLUA_BUNDLE_MODULES.h()
-            local colors = __DARKLUA_BUNDLE_MODULES.c()
-            local TokenKind = Tokenizer.TokenKind
-            local lookupify = __DARKLUA_BUNDLE_MODULES.f().lookupify
+            local Tokenizer, colors = __DARKLUA_BUNDLE_MODULES.h(), __DARKLUA_BUNDLE_MODULES.c()
+            local TokenKind, lookupify = Tokenizer.TokenKind, __DARKLUA_BUNDLE_MODULES.f().lookupify
 
             return function(code, luaVersion)
-                local out = ''
-                local tokenizer = Tokenizer.new(Tokenizer, {LuaVersion = luaVersion})
+                local out, tokenizer = '', Tokenizer.new(Tokenizer, {LuaVersion = luaVersion})
 
                 tokenizer.append(tokenizer, code)
 
-                local tokens = tokenizer.scanAll(tokenizer)
-                local nonColorSymbols = lookupify{
+                local tokens, nonColorSymbols, defaultGlobals, currentPos = tokenizer.scanAll(tokenizer), lookupify{
                     ',',
                     ';',
                     '(',
@@ -10722,14 +10426,12 @@ end
                     ':',
                     '[',
                     ']',
-                }
-                local defaultGlobals = lookupify{
+                }, lookupify{
                     'string',
                     'table',
                     'bit32',
                     'bit',
-                }
-                local currentPos = 1
+                }, 1
 
                 for _, token in ipairs(tokens)do
                     if token.startPos >= currentPos then
@@ -10768,7 +10470,7 @@ end
             end
         end
 
-        __DARKLUA_BUNDLE_MODULES.J = function()
+        function __DARKLUA_BUNDLE_MODULES.J()
             local v = __DARKLUA_BUNDLE_MODULES.cache.J
 
             if not v then
@@ -10787,7 +10489,7 @@ end
                 Minify = {
                     LuaVersion = 'Lua51',
                     VarNamePrefix = '',
-                    NameGenerator = 'Il.lua',
+                    NameGenerator = 'Il',
                     PrettyPrint = false,
                     Seed = 0,
                     Steps = {},
@@ -10795,7 +10497,7 @@ end
                 Weak = {
                     LuaVersion = 'Lua51',
                     VarNamePrefix = '',
-                    NameGenerator = 'Il.lua',
+                    NameGenerator = 'Il',
                     PrettyPrint = false,
                     Seed = 0,
                     Steps = {
@@ -10819,7 +10521,7 @@ end
                 Medium = {
                     LuaVersion = 'Lua51',
                     VarNamePrefix = '',
-                    NameGenerator = 'Il.lua',
+                    NameGenerator = 'Il',
                     PrettyPrint = false,
                     Seed = 0,
                     Steps = {
@@ -10858,7 +10560,7 @@ end
                 Strong = {
                     LuaVersion = 'Lua51',
                     VarNamePrefix = '',
-                    NameGenerator = 'Il.lua',
+                    NameGenerator = 'Il',
                     PrettyPrint = false,
                     Seed = 0,
                     Steps = {
@@ -10901,7 +10603,7 @@ end
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.K = function()
+        function __DARKLUA_BUNDLE_MODULES.K()
             local v = __DARKLUA_BUNDLE_MODULES.cache.K
 
             if not v then
@@ -10952,13 +10654,7 @@ end
                 return {}
             end
 
-            local Pipeline = __DARKLUA_BUNDLE_MODULES.I()
-            local highlight = __DARKLUA_BUNDLE_MODULES.J()
-            local colors = __DARKLUA_BUNDLE_MODULES.c()
-            local Logger = __DARKLUA_BUNDLE_MODULES.d()
-            local Presets = __DARKLUA_BUNDLE_MODULES.K()
-            local Config = __DARKLUA_BUNDLE_MODULES.a()
-            local util = __DARKLUA_BUNDLE_MODULES.f()
+            local Pipeline, highlight, colors, Logger, Presets, Config, util = __DARKLUA_BUNDLE_MODULES.I(), __DARKLUA_BUNDLE_MODULES.J(), __DARKLUA_BUNDLE_MODULES.c(), __DARKLUA_BUNDLE_MODULES.d(), __DARKLUA_BUNDLE_MODULES.K(), __DARKLUA_BUNDLE_MODULES.a(), __DARKLUA_BUNDLE_MODULES.f()
 
             return {
                 Pipeline = Pipeline,
@@ -10970,7 +10666,7 @@ end
             }
         end
 
-        __DARKLUA_BUNDLE_MODULES.L = function()
+        function __DARKLUA_BUNDLE_MODULES.L()
             local v = __DARKLUA_BUNDLE_MODULES.cache.L
 
             if not v then
@@ -11000,8 +10696,7 @@ local function file_exists(file)
 end
 
 string.split = function(str, sep)
-    local fields = {}
-    local pattern = string.format('([^%s]+)', sep)
+    local fields, pattern = {}, string.format('([^%s]+)', sep)
 
     str.gsub(str, pattern, function(c)
         fields[#fields + 1] = c
@@ -11024,11 +10719,7 @@ local function lines_from(file)
     return lines
 end
 
-local config
-local sourceFile
-local outFile
-local luaVersion
-local prettyPrint
+local config, sourceFile, outFile, luaVersion, prettyPrint
 
 Prometheus.colors.enabled = true
 
@@ -11040,7 +10731,7 @@ while i <= #arg do
     if curr.sub(curr, 1, 2) == '--' then
         if curr == '--preset' or curr == '--p' then
             if config then
-                Prometheus.Logger:warn('The config was set multiple times')
+                Prometheus.Logger:warn'The config was set multiple times'
             end
 
             i = i + 1
@@ -11071,7 +10762,7 @@ while i <= #arg do
             i = i + 1
 
             if outFile then
-                Prometheus.Logger:warn('The output file was specified multiple times!')
+                Prometheus.Logger:warn'The output file was specified multiple times!'
             end
 
             outFile = arg[i]
@@ -11089,9 +10780,8 @@ while i <= #arg do
 ..., 'red'))
 
                 local args = {...}
-                local message = table.concat(args, ' ')
-                local fileName = sourceFile.sub(sourceFile, -4) == '.lua' and sourceFile.sub(sourceFile, 0, 
--5) .. '.error.txt' or sourceFile .. '.error.txt'
+                local message, fileName = table.concat(args, ' '), sourceFile.sub(sourceFile, 
+-4) == '.lua' and sourceFile.sub(sourceFile, 0, -5) .. '.error.txt' or sourceFile .. '.error.txt'
                 local handle = io.open(fileName, 'w')
 
                 handle.write(handle, message)
@@ -11113,10 +10803,10 @@ while i <= #arg do
 end
 
 if not sourceFile then
-    Prometheus.Logger:error('No input file was specified!')
+    Prometheus.Logger:error'No input file was specified!'
 end
 if not config then
-    Prometheus.Logger:warn('No config was specified, falling back to Minify preset')
+    Prometheus.Logger:warn'No config was specified, falling back to Minify preset'
 
     config = Prometheus.Presets.Minify
 end
@@ -11135,8 +10825,7 @@ if not outFile then
     end
 end
 
-local source = table.concat(lines_from(sourceFile), '\n')
-local pipeline = Prometheus.Pipeline:fromConfig(config)
+local source, pipeline = table.concat(lines_from(sourceFile), '\n'), Prometheus.Pipeline:fromConfig(config)
 local out = pipeline.apply(pipeline, source, sourceFile)
 
 Prometheus.Logger:info(string.format('Writing output to "%s"', outFile))
